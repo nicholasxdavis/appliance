@@ -1,0 +1,458 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #ff6f61;
+    --secondary-color: #ff4a3d;
+    --background-dark: #121212;
+    --background-light: #1a1a1a;
+    --text-light: #e0e0e0;
+    --text-dark: #2c2c2c;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: var(--text-light);
+    background: var(--background-dark);
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background: var(--background-light);
+    color: #fff;
+    padding: 3rem 1rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    animation: fadeInDown 1s ease-in-out;
+    letter-spacing: -0.05em;
+}
+
+header p {
+    font-size: 1.25rem;
+    margin-top: 0.75rem;
+    animation: fadeInUp 1s ease-in-out;
+    opacity: 0.9;
+}
+
+/* Hero Section */
+.hero {
+    background: url('header.jpeg') no-repeat center center/cover;
+    color: #fff;
+    padding: 6rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeInDown 1s ease-in-out;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin: 1.5rem 0;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-in-out;
+    opacity: 0.9;
+}
+p {
+    padding-bottom: 20px;
+}
+
+.hero .btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    transition: var(--transition);
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 1.5s ease-in-out;
+    box-shadow: var(--shadow);
+}
+
+.hero .btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 111, 97, 0.4);
+}
+
+.hero .call-now {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1.5s ease-in-out;
+    opacity: 0.9;
+}
+
+.hero .call-now strong {
+    color: var(--primary-color);
+}
+
+/* Services Section */
+.services {
+    padding: 4rem 1rem;
+    text-align: center;
+    background: var(--background-light);
+}
+
+.services h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.services ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.services li {
+    background: var(--text-dark);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.services li:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Why Choose Us Section */
+.why-choose-us {
+    padding: 4rem 1rem;
+    background: linear-gradient(135deg, var(--background-light), var(--text-dark));
+    color: #fff;
+    text-align: center;
+}
+
+.why-choose-us h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.why-choose-us ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.why-choose-us li {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.why-choose-us li:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Testimonials Section */
+.testimonial {
+    display: none; /* Hide all testimonials by default */
+}
+.testimonial.active {
+    display: block; /* Show only the active testimonial */
+}
+.testimonials {
+    padding: 4rem 1rem;
+    background: var(--background-light);
+    text-align: center;
+}
+
+.testimonials h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.testimonial {
+    background: var(--text-dark);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 1.5rem auto;
+    max-width: 600px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.testimonial:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.testimonial p {
+    font-style: italic;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+}
+
+.testimonial strong {
+    color: var(--primary-color);
+}
+
+/* Contact Section */
+.contact {
+    padding: 4rem 1rem;
+    background: linear-gradient(135deg, var(--background-light), var(--text-dark));
+    color: #fff;
+    text-align: center;
+}
+
+.contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.contact form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1.5rem;
+}
+
+.contact input,
+.contact textarea {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transition: var(--transition);
+}
+
+.contact input::placeholder,
+.contact textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.contact input:focus,
+.contact textarea:focus {
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+.contact button {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.contact button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 111, 97, 0.4);
+}
+
+/* Footer */
+footer {
+    background: var(--background-light);
+    color: #fff;
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* General button styling */
+.arrow-button {
+    background-color: var(--primary-color); /* Background color */
+    color: var(--text-light); /* Text color */
+    padding: 12px 24px; /* Padding for a nice button size */
+    border: none; /* Remove border */
+    border-radius: 50%; /* Circular button */
+    font-size: 24px; /* Font size for arrows */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: var(--shadow); /* Add shadow for depth */
+    transition: var(--transition); /* Smooth transition for hover effect */
+    display: inline-flex; /* Flexbox for proper alignment */
+    align-items: center; /* Vertically center the content */
+    justify-content: center; /* Horizontally center the content */
+    width: 60px; /* Button width */
+    height: 60px; /* Button height */
+}
+
+/* Hover effect for the buttons */
+.arrow-button:hover {
+    background-color: var(--secondary-color); /* Change background on hover */
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Active state (when clicked) */
+.arrow-button:active {
+    background-color: var(--background-dark); /* Darker background on click */
+    transform: scale(0.98); /* Slight shrink effect on click */
+}
+
+/* Focus state (when the button is focused) */
+.arrow-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px var(--secondary-color); /* Add a custom outline for focus */
+}
+/* Policies Section */
+.policies {
+    padding: 4rem 1rem;
+    background: var(--background-light);
+    color: var(--text-light);
+    text-align: center;
+    max-width: 8000px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.policies h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.policies h3 {
+    font-size: 1.75rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    font-weight: 600;
+    text-align: center; /* Center the heading text */
+}
+
+/* Styles for collapsible policies */
+.policy-item {
+    margin-bottom: 1.5rem; /* Space between policy items */
+}
+
+/* Toggle style for headings */
+.toggle {
+    cursor: pointer; /* Pointer cursor for toggle */
+    display: flex; /* Flexbox to align arrow and text */
+    justify-content: center; /* Center the content */
+    align-items: center; /* Center items vertically */
+}
+
+/* Position arrow to the right */
+.toggle .arrow {
+    margin-left: 10px; /* Space between text and arrow */
+}
+
+/* Style for the collapse paragraph */
+.collapse {
+    display: none; /* Initially hidden */
+    margin-top: 0.5rem; /* Space above the paragraph */
+}
+
+/* Arrow rotation for open state */
+.toggle.active .arrow {
+    transform: rotate(180deg); /* Rotate arrow when active */
+}
+
+.policies p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--text-light);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.1rem;
+}
+/* Policy Arrow */
+.toggle .arrow {
+    margin-left: 10px; /* Space between text and arrow */
+    font-size: 0.8rem; /* Reduce font size to make the arrow 20% smaller */
+}
+
+/* Arrow rotation for open state */
+.toggle.active .arrow {
+    transform: rotate(90deg); /* Rotate to show the down arrow when active */
+}
+
