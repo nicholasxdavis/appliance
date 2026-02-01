@@ -347,15 +347,18 @@
     </div>
 
     <script>
-        // Check local storage for popup status
-        document.addEventListener('DOMContentLoaded', () => {
+        // Popup Control Logic
+        function checkWelcomePopup() {
             const hasSeenPopup = localStorage.getItem('bn_admin_popup_seen');
             if (!hasSeenPopup) {
-                // Show popup if not seen
                 const modal = document.getElementById('bnModal');
-                if (modal) modal.classList.remove('hidden');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    // Ensure it's on top of everything
+                    modal.style.zIndex = '9999';
+                }
             }
-        });
+        }
 
         function closeBnPopup() {
             document.getElementById('bnModal').classList.add('hidden');
@@ -564,6 +567,9 @@
                 document.getElementById('preview-pane').classList.add('flex');
                 document.getElementById('save-btn').classList.remove('hidden');
                 document.getElementById('connection-status').classList.remove('hidden');
+
+                // Trigger Welcome Popup if applicable
+                checkWelcomePopup();
 
             } catch (error) {
                 console.error(error);
