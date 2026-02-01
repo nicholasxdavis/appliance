@@ -21,27 +21,27 @@
     <nav class="bg-white shadow-sm border-b border-gray-200 z-20 flex-shrink-0">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-14">
-                <div class="flex items-center gap-4">
-                    <span class="text-xl font-bold text-gray-800">Admin Panel</span>
+                <div class="flex items-center gap-4 flex-shrink-0">
+                    <span class="text-xl font-bold text-gray-800">Admin <span class="hidden sm:inline">Panel</span></span>
                     <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full hidden" id="connection-status">Connected</span>
                 </div>
                 <!-- Right Side Controls -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar ml-4">
                     <input type="file" id="backup-input" accept=".json" class="hidden" onchange="importBackup(this)">
                     
-                    <button onclick="document.getElementById('backup-input').click()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-file-import"></i> Restore Backup
+                    <button onclick="document.getElementById('backup-input').click()" class="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 sm:px-4 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-2 text-white whitespace-nowrap">
+                        <i class="fa-solid fa-file-import"></i> <span class="hidden sm:inline">Restore</span>
                     </button>
-                    <button onclick="downloadBackup()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-download"></i> Backup JSON
+                    <button onclick="downloadBackup()" class="bg-gray-700 hover:bg-gray-600 px-3 py-1.5 sm:px-4 sm:py-2 rounded text-xs sm:text-sm flex items-center gap-2 text-white whitespace-nowrap">
+                        <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Backup</span>
                     </button>
                     
-                    <div class="h-6 w-px bg-gray-600 mx-2"></div>
+                    <div class="h-6 w-px bg-gray-600 mx-1 sm:mx-2"></div>
                     
-                    <button id="save-btn" onclick="saveContent()" class="hidden bg-green-600 hover:bg-green-500 px-6 py-2 rounded font-bold transition flex items-center gap-2 shadow-lg hover:shadow-green-500/20 text-white">
-                        <i class="fa-solid fa-cloud-upload"></i> Save Changes
+                    <button id="save-btn" onclick="saveContent()" class="hidden bg-green-600 hover:bg-green-500 px-4 py-1.5 sm:px-6 sm:py-2 rounded font-bold transition flex items-center gap-2 shadow-lg hover:shadow-green-500/20 text-white whitespace-nowrap text-xs sm:text-base">
+                        <i class="fa-solid fa-cloud-upload"></i> Save
                     </button>
-                    <button onclick="logout()" class="text-gray-400 hover:text-red-500 text-sm">
+                    <button onclick="logout()" class="text-gray-400 hover:text-red-500 text-sm px-2">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
@@ -50,10 +50,10 @@
     </nav>
 
     <!-- Main Layout -->
-    <div class="flex-1 flex overflow-hidden">
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
         
         <!-- Editor Sidebar (Left) -->
-        <div id="editor-pane" class="w-1/3 bg-white border-r border-gray-200 flex flex-col overflow-hidden hidden relative">
+        <div id="editor-pane" class="w-full md:w-1/3 bg-white border-r border-gray-200 flex flex-col overflow-hidden hidden relative order-2 md:order-1 h-1/2 md:h-auto">
              <div class="border-b border-gray-200 bg-gray-50 overflow-x-auto flex-shrink-0">
                 <div id="section-tabs" class="flex"></div>
             </div>
@@ -63,8 +63,8 @@
         </div>
 
         <!-- Preview Pane (Right) -->
-        <div id="preview-pane" class="w-2/3 bg-gray-100 relative hidden flex-col">
-            <div class="bg-white border-b border-gray-200 px-4 py-2 flex justify-between items-center text-xs text-gray-500">
+        <div id="preview-pane" class="w-full md:w-2/3 bg-gray-100 relative hidden flex-col order-1 md:order-2 h-1/2 md:h-auto border-b md:border-b-0 md:border-l border-gray-300">
+            <div class="bg-white border-b border-gray-200 px-4 py-2 flex justify-between items-center text-xs text-gray-500 flex-shrink-0">
                 <span class="font-bold uppercase tracking-wider"><i class="fa-solid fa-eye"></i> Live Preview</span>
                 <button onclick="document.getElementById('preview-frame').contentWindow.location.reload()" class="text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition flex items-center gap-1">
                     <i class="fa-solid fa-rotate-right"></i> Refresh
@@ -140,9 +140,9 @@
     </div>
 
     <!-- Help Modal -->
-    <div id="help-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full relative">
-            <button onclick="document.getElementById('help-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+    <div id="help-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden p-4 sm:p-0">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
+            <button onclick="document.getElementById('help-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 sticky z-10">
                 <i class="fa-solid fa-xmark fa-lg"></i>
             </button>
             <h3 class="text-2xl font-bold mb-4 text-gray-800">Section Help</h3>
