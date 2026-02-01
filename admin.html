@@ -150,9 +150,27 @@
                  
                  // Auto-fill GitHub Token if available
                  if (window.CONFIG.github && window.CONFIG.github.token && !localStorage.getItem('gh_token')) {
-                     // We don't auto-login immediately to avoid confusion, but we pre-fill or auto-set
-                     // If user is already "app authenticated", we might auto-login to GH
                      document.getElementById('github-token').value = window.CONFIG.github.token;
+                 }
+             } else {
+                 // Config missing detector
+                 console.warn('js/config.js not loaded. Secrets will not be available.');
+                 const authSection = document.getElementById('auth-section');
+                 if(authSection) {
+                     const warning = document.createElement('div');
+                     warning.className = 'bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 text-sm';
+                     warning.innerHTML = `
+                        <p class="font-bold">⚠️ Secrets Configuration Missing</p>
+                        <p>The file <code>js/config.js</code> returned 404.</p>
+                        <p class="mt-2"><strong>Fix:</strong> Go to Repo Settings > Pages > Build and deployment.</p>
+                        <p>Change <strong>Source</strong> to "GitHub Actions".</p>
+                     `;
+                     // Insert at top of auth/login forms
+                     const appLogin = document.getElementById('app-login-section');
+                     if(appLogin && !appLogin.classList.contains('hidden')) {
+                         appLogin.querySelector('form').before(warning.cloneNode(true));
+                     }
+                     authSection.querySelector('form').before(warning);
                  }
              }
 
