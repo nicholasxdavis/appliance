@@ -13,6 +13,162 @@
         /* Loader */
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* BN Admin Popup Styles */
+        :root {
+            --bn-black: #000000;
+            --bn-card-bg: #0a0a0a;
+            --bn-white: #ffffff;
+            --bn-orange: #ff6b00;
+            --bn-grey: #888888;
+            --bn-border-radius: 24px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; /* Ensure high z-index */
+            padding: 20px;
+            animation: bnFadeIn 0.3s ease-out;
+        }
+
+        .bn-popup {
+            position: relative;
+            background: var(--bn-black);
+            width: 100%;
+            max-width: 420px;
+            border-radius: var(--bn-border-radius);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+            border: 1px solid #222;
+            animation: bnSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bn-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--bn-grey);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .bn-close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: var(--bn-white);
+            transform: rotate(90deg);
+        }
+
+        .bn-logo-container { margin-bottom: 25px; }
+        .bn-logo-container a { display: inline-block; transition: opacity 0.2s; }
+        .bn-logo-container a:hover { opacity: 0.8; }
+        .bn-logo-container img { width: 140px; height: auto; display: block; margin: 0 auto; }
+
+        .bn-h1 {
+            color: var(--bn-white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .bn-subtitle {
+            color: var(--bn-orange);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .bn-message-body {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .bn-highlight-date {
+            color: var(--bn-white);
+            font-weight: 600;
+            border-bottom: 1px solid var(--bn-orange);
+        }
+
+        .bn-lifetime-badge {
+            display: inline-block;
+            background: rgba(255, 107, 0, 0.15);
+            color: var(--bn-orange);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin: 0 2px;
+            vertical-align: middle;
+        }
+
+        .bn-action-btn {
+            background: var(--bn-white);
+            color: var(--bn-black);
+            border: none;
+            padding: 12px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            display: block;
+        }
+
+        .bn-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .bn-contact-btn {
+            background: transparent;
+            color: var(--bn-grey);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 32px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 12px;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .bn-contact-btn:hover {
+            border-color: var(--bn-white);
+            color: var(--bn-white);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes bnFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes bnSlideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
     </style>
 </head>
 <body class="bg-gray-100 h-screen flex flex-col overflow-hidden">
@@ -151,6 +307,61 @@
             </div>
         </div>
     </div>
+
+    <!-- BN POPUP COMPONENT -->
+    <div id="bnModal" class="modal-overlay hidden">
+        <div class="bn-popup">
+            <!-- Close Icon Top Right -->
+            <button class="bn-close-btn" onclick="closeBnPopup()" aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Centered Logo -->
+            <div class="bn-logo-container">
+                <a href="https://www.blacnova.net" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.blacnova.net/img/logo_white.png" alt="Blacnova Logo">
+                </a>
+            </div>
+
+            <!-- Content -->
+            <h1 class="bn-h1">Welcome AJ's Appliance</h1>
+            <span class="bn-subtitle">To Your Admin Panel</span>
+
+            <p class="bn-message-body">
+                Thank you for being a valued client since <span class="bn-highlight-date">1/31/2026</span>.
+                <br><br>
+                You have been gifted <span class="bn-lifetime-badge">LIFETIME ACCESS</span> to Blacnova Development hosting services and CMS fees with included admin panel.
+            </p>
+
+            <button class="bn-action-btn" onclick="closeBnPopup()">
+                Access Panel
+            </button>
+            
+            <a href="https://www.blacnova.net/#contact" target="_blank" rel="noopener noreferrer" class="bn-contact-btn">
+                Contact Support
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Check local storage for popup status
+        document.addEventListener('DOMContentLoaded', () => {
+            const hasSeenPopup = localStorage.getItem('bn_admin_popup_seen');
+            if (!hasSeenPopup) {
+                // Show popup if not seen
+                const modal = document.getElementById('bnModal');
+                if (modal) modal.classList.remove('hidden');
+            }
+        });
+
+        function closeBnPopup() {
+            document.getElementById('bnModal').classList.add('hidden');
+            localStorage.setItem('bn_admin_popup_seen', 'true');
+        }
+    </script>
 
     <!-- Load Config (Injected Secrets) -->
     <script src="js/config.js"></script> <!-- Will fail silently if not present, which is fine -->
