@@ -1022,9 +1022,29 @@
           if (!response.ok) throw new Error("Failed to load content");
           const data = await response.json();
 
-          // General
-          document.getElementById("meta-title").textContent =
-            data.general.title;
+          // Populate elements based on data object
+        
+        // Visibility Flags (Initial Load)
+        const toggles = {
+            'home': data.hero.visible,
+            'trust-indicators': data.trust ? data.trust.visible : true,
+            'brands': data.brands.visible,
+            'services': data.services.visible,
+            'about': data.about.visible,
+            'service-area': data.serviceArea.visible,
+            'reviews': data.reviews.visible,
+            'quote': data.quote.visible
+        };
+        
+        Object.entries(toggles).forEach(([id, visible]) => {
+            const el = document.getElementById(id);
+            if(el && visible !== undefined) {
+                el.style.display = visible ? 'block' : 'none';
+            }
+        });
+
+        // General
+        document.getElementById('meta-title').textContent = data.general.title;
           document.getElementById("meta-description").content =
             data.general.description;
           document.getElementById("page-body").style.opacity = "1";
@@ -1386,6 +1406,10 @@
           setText("mobile-nav-getFreeQuote", data.nav.getFreeQuote);
 
           // Hero
+          if (data.hero.visible !== undefined) {
+             const hero = document.getElementById('home');
+             if(hero) hero.style.display = data.hero.visible ? 'block' : 'none';
+          }
           setText("hero-title-prefix", data.hero.title.prefix);
           setText("hero-title-highlight", data.hero.title.highlight);
           setText("hero-title-suffix", data.hero.title.suffix);
@@ -1397,7 +1421,27 @@
           setText("hero-badge-title", data.hero.badge.title);
           setText("hero-badge-subtitle", data.hero.badge.subtitle);
 
+          // Trust Indicators (Angi)
+          if (data.trust && data.trust.visible !== undefined) {
+             const trust = document.getElementById('trust-indicators');
+             if(trust) trust.style.display = data.trust.visible ? 'block' : 'none';
+          }
+          const trustContainer = document.getElementById('trust-badges-container');
+          if (trustContainer && data.trust && data.trust.badges) {
+              trustContainer.innerHTML = data.trust.badges.map(badge => `
+                  <div class="flex flex-col items-center p-4 bg-stone-50 rounded-lg transform hover:scale-105 transition-transform duration-300 shadow-sm border border-stone-100">
+                      <img src="${badge.img}" alt="${badge.title}" class="h-16 w-auto object-contain mb-2">
+                       <p class="text-[10px] uppercase tracking-widest text-stone-400 font-medium text-center max-w-[120px]">${badge.title}</p>
+                       <span class="mt-2 text-xs font-bold text-white bg-stone-900 px-2 py-0.5 rounded-full">${badge.winnerLabel}</span>
+                  </div>
+              `).join('');
+          }
+
           // Brands
+          if (data.brands && data.brands.visible !== undefined) {
+             const brands = document.getElementById('brands');
+             if(brands) brands.style.display = data.brands.visible ? 'block' : 'none';
+          }
           setText("brands-title", data.brands.title);
           const brandsList = document.getElementById("brands-list");
           if(brandsList && data.brands.list) {
@@ -1410,6 +1454,10 @@
           }
 
           // Services
+          if (data.services && data.services.visible !== undefined) {
+             const services = document.getElementById('services');
+             if(services) services.style.display = data.services.visible ? 'block' : 'none';
+          }
           setText("services-badge", data.services.badge);
           setText("services-title", data.services.title);
           setText("services-description", data.services.description);
@@ -1428,6 +1476,10 @@
           }
 
           // About
+          if (data.about && data.about.visible !== undefined) {
+             const about = document.getElementById('about');
+             if(about) about.style.display = data.about.visible ? 'block' : 'none';
+          }
           setText("about-badge", data.about.badge);
           setText("about-title", data.about.title);
           setText("about-title-highlight", data.about.titleHighlight);
@@ -1446,6 +1498,10 @@
           }
 
           // Service Area
+          if (data.serviceArea && data.serviceArea.visible !== undefined) {
+             const serviceArea = document.getElementById('service-area');
+             if(serviceArea) serviceArea.style.display = data.serviceArea.visible ? 'block' : 'none';
+          }
           setText("service-area-badge", data.serviceArea.badge);
           setText("service-area-title", data.serviceArea.title);
           setHTML("service-area-description", data.serviceArea.description);
@@ -1463,6 +1519,10 @@
           }
           
           // Reviews
+          if (data.reviews && data.reviews.visible !== undefined) {
+             const reviews = document.getElementById('reviews');
+             if(reviews) reviews.style.display = data.reviews.visible ? 'block' : 'none';
+          }
           setText("reviews-title", data.reviews.title);
           const reviewsList = document.getElementById("reviews-list");
           if(reviewsList && data.reviews.items) {
@@ -1478,6 +1538,7 @@
                     </div>
                 </div>
              `).join("");
+             // Static Average (could be made dynamic too if needed, but for now just preserving structure)
              reviewsHTML += `
                 <div class="bg-stone-900 p-8 flex flex-col justify-center items-center text-center">
                     <img src="img/badge.png" alt="Angi Super Service Award 2024" class="h-16 w-auto object-contain mb-4" title="2024 Super Service Award">
@@ -1493,6 +1554,10 @@
           }
 
           // Quote & Footer
+          if (data.quote && data.quote.visible !== undefined) {
+             const quote = document.getElementById('quote');
+             if(quote) quote.style.display = data.quote.visible ? 'block' : 'none';
+          }
           setText("quote-badge", data.quote.badge);
           setText("quote-title", data.quote.title);
           setText("quote-description", data.quote.description);

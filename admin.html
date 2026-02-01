@@ -317,20 +317,38 @@
             }
         }
 
+        // Debounce timer
+        let previewTimeout;
+
         function updatePreview() {
             if (!currentContent) return;
-            // Post message to iframe
-            previewFrame.contentWindow.postMessage({
-                type: 'previewUpdate',
-                content: currentContent
-            }, '*');
+            
+            // Clear existing timeout
+            if (previewTimeout) clearTimeout(previewTimeout);
+
+            // Debounce for 50ms to strictly follow 'live' feel without choking
+            previewTimeout = setTimeout(() => {
+                console.log('Sending preview update...', new Date().toISOString());
+                const previewFrame = document.getElementById('preview-frame');
+                if (previewFrame && previewFrame.contentWindow) {
+                    previewFrame.contentWindow.postMessage({
+                        type: 'previewUpdate',
+                        content: currentContent
+                    }, '*');
+                }
+            }, 50);
         }
 
         // Add listener to iframe load to ensure we sync on initial load
-        previewFrame.onload = () => {
-             // Slight delay to ensure scripts ran
-             setTimeout(updatePreview, 500);
-        };
+        const previewFrameEl = document.getElementById('preview-frame');
+        if (previewFrameEl) {
+             // Cache buster
+             previewFrameEl.src = `index.html?t=${Date.now()}`;
+             
+             previewFrameEl.onload = () => {
+                 setTimeout(updatePreview, 500);
+             };
+        }
 
         async function saveContent() {
             const token = localStorage.getItem('gh_token');
@@ -498,6 +516,32 @@
             labelRow.appendChild(fieldLabel);
 
             wrapper.appendChild(labelRow);
+
+            if (typeof value === 'boolean') {
+                input = document.createElement('input');
+                input.type = 'checkbox';
+                input.checked = value;
+                input.className = 'w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-gray-300 transition cursor-pointer';
+                input.onchange = (e) => {
+                    updateContentInState(path, e.target.checked);
+                };
+                
+                // Special styling for boolean wrapper
+                wrapper.className = 'mb-4 flex items-center gap-3 bg-gray-50 p-3 rounded-md border border-gray-200';
+                labelRow.className = 'flex-1 mb-0';
+                wrapper.innerHTML = ''; // Reset wrapper
+                
+                wrapper.appendChild(input);
+                
+                const label = document.createElement('label');
+                label.className = 'text-sm font-medium text-gray-700 capitalize cursor-pointer select-none';
+                label.textContent = path[path.length - 1];
+                label.onclick = () => { input.click(); }; // Make label clickable
+                wrapper.appendChild(label);
+                
+                container.appendChild(wrapper);
+                return; // Early return for boolean
+            }
 
             let input;
             if (typeof value === 'string' && value.length > 60 && !isImage) {

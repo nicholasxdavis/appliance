@@ -24,6 +24,7 @@
     "getFreeQuote": "Get Free Quote"
   },
   "hero": {
+    "visible": true,
     "title": {
       "prefix": "Your Local",
       "highlight": "Repair Experts",
@@ -44,6 +45,7 @@
     }
   },
   "trust": {
+    "visible": true,
     "badges": [
       {
         "img": "img/badge.png",
@@ -58,6 +60,7 @@
     ]
   },
   "brands": {
+    "visible": true,
     "title": "We Service All Major Brands",
     "list": [
       {
@@ -99,6 +102,7 @@
     ]
   },
   "services": {
+    "visible": true,
     "badge": "What We Fix",
     "title": "Expert Repairs for Every Brand",
     "description": "Whether it's a vintage stove in Mesilla or a smart fridge in Sonoma Ranch, we have the tools and training to fix it.",
@@ -126,6 +130,7 @@
     ]
   },
   "about": {
+    "visible": true,
     "badge": "Committed to Excellence",
     "title": "Integrity, Fairness",
     "titleHighlight": "& Responsibility",
@@ -139,6 +144,7 @@
     ]
   },
   "serviceArea": {
+    "visible": true,
     "badge": "Service Area",
     "title": "Where We Work",
     "description": "Based in Las Cruces, we proudly serve homeowners and property managers within a <strong class=\"text-brand\">60-mile radius</strong> of Las Cruces, New Mexico.",
@@ -158,6 +164,7 @@
     "mapStatus": "Service Active Now"
   },
   "reviews": {
+    "visible": true,
     "title": "Trusted by Las Cruces",
     "averageRating": "4.9",
     "totalReviewsLabel": "Based on 40 Reviews",
@@ -175,6 +182,7 @@
     ]
   },
   "quote": {
+    "visible": true,
     "badge": "Get A Quote",
     "title": "Need a Repair?",
     "description": "Don't let a broken appliance ruin your week. Fill out the form to get a free quote and schedule your repair.",
