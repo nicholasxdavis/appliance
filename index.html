@@ -1850,16 +1850,21 @@
           // Maintenance Mode Logic (Live Preview)
            if (data.maintenance) {
               const overlay = document.getElementById('maintenance-overlay');
-              const body = document.getElementById('page-body');
+              const body = document.getElementById('page-body'); // The main wrapper
+              
               if (overlay && body) {
                   if (data.maintenance.enabled) {
                       overlay.classList.remove('hidden');
-                      body.classList.add('blur-sm', 'pointer-events-none'); // Blur background instead of hiding to keep preview context
+                      // Use a robust hiding method that preserves layout state if needed, or just hard hide
+                      body.style.display = 'none'; 
+                      document.body.style.overflow = 'hidden'; // Prevent scrolling
+                      
                       document.getElementById('maint-title').textContent = data.maintenance.title;
                       document.getElementById('maint-message').textContent = data.maintenance.message;
                   } else {
                       overlay.classList.add('hidden');
-                      body.classList.remove('blur-sm', 'pointer-events-none');
+                      body.style.display = 'block';
+                      document.body.style.overflow = ''; // Restore scrolling
                   }
               }
            }

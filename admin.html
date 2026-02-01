@@ -65,8 +65,10 @@
         <!-- Preview Pane (Right) -->
         <div id="preview-pane" class="w-2/3 bg-gray-100 relative hidden flex-col">
             <div class="bg-white border-b border-gray-200 px-4 py-2 flex justify-between items-center text-xs text-gray-500">
-                <span><i class="fa-solid fa-eye"></i> Live Preview</span>
-                <span>index.html</span>
+                <span class="font-bold uppercase tracking-wider"><i class="fa-solid fa-eye"></i> Live Preview</span>
+                <button onclick="document.getElementById('preview-frame').contentWindow.location.reload()" class="text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-right"></i> Refresh
+                </button>
             </div>
             <iframe id="preview-frame" src="index.html" class="w-full h-full border-none bg-white"></iframe>
         </div>
