@@ -1,0 +1,188 @@
+{
+  "general": {
+    "title": "AJ's Appliance Repair | Las Cruces, NM",
+    "description": "Local, honest, and professional appliance repair in Las Cruces, NM. Serving Las Cruces & Surrounding Areas within a 60-mile radius.",
+    "phone": "(575) 555-0123",
+    "email": "contact@ajsappliancerepair.com",
+    "address": "PO Box 1001, Anthony, NM 88021",
+    "hours": {
+      "weekdays": "Mon - Fri: 8:00 AM - 5:00 PM",
+      "weekend": "Sat - Sun: Closed"
+    },
+    "social": {
+      "facebook": "#",
+      "instagram": "#"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "brands": "Brands",
+    "services": "Services",
+    "about": "About",
+    "serviceArea": "Service Area",
+    "contactUs": "Contact Us",
+    "getFreeQuote": "Get Free Quote"
+  },
+  "hero": {
+    "title": {
+      "prefix": "Your Local",
+      "highlight": "Repair Experts",
+      "suffix": "in Las Cruces"
+    },
+    "subtitle": "Honest, punctual, and professional service right here in Las Cruces. We get your home running smoothly again.",
+    "buttons": {
+      "primary": "Get Started",
+      "secondary": "Our Services"
+    },
+    "images": {
+      "heroMain": "img/hero.png",
+      "badgeIcon": "img/zia.png"
+    },
+    "badge": {
+      "title": "Locally Owned",
+      "subtitle": "Serving Mesilla Valley"
+    }
+  },
+  "trust": {
+    "badges": [
+      {
+        "img": "img/badge.png",
+        "title": "2024 Super Service Award",
+        "winnerLabel": "Winner"
+      },
+      {
+        "img": "img/2025.png",
+        "title": "2025 Super Service Award",
+        "winnerLabel": "Winner"
+      }
+    ]
+  },
+  "brands": {
+    "title": "We Service All Major Brands",
+    "list": [
+      {
+        "name": "Frigidaire",
+        "logo": "https://cdn.worldvectorlogo.com/logos/frigidaire-1.svg"
+      },
+      {
+        "name": "Maytag",
+        "logo": "https://cdn.worldvectorlogo.com/logos/maytag.svg"
+      },
+      {
+        "name": "Whirlpool",
+        "logo": "https://cdn.worldvectorlogo.com/logos/whirlpool.svg"
+      },
+      {
+        "name": "LG",
+        "logo": "https://cdn.worldvectorlogo.com/logos/lg-electronics.svg"
+      },
+      {
+        "name": "Samsung",
+        "logo": "https://cdn.worldvectorlogo.com/logos/samsung.svg"
+      },
+      {
+        "name": "Electrolux",
+        "logo": "https://cdn.worldvectorlogo.com/logos/electrolux.svg"
+      },
+      {
+        "name": "Kenmore",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/2/23/Kenmore_Appliances_logo.svg"
+      },
+      {
+        "name": "KitchenAid",
+        "logo": "https://cdn.worldvectorlogo.com/logos/kitchenaid.svg"
+      },
+      {
+        "name": "Bosch",
+        "logo": "https://cdn.worldvectorlogo.com/logos/bosch-2.svg"
+      }
+    ]
+  },
+  "services": {
+    "badge": "What We Fix",
+    "title": "Expert Repairs for Every Brand",
+    "description": "Whether it's a vintage stove in Mesilla or a smart fridge in Sonoma Ranch, we have the tools and training to fix it.",
+    "items": [
+      {
+        "title": "Fridge & Freezer",
+        "iconClass": "fa-solid fa-snowflake",
+        "description": "We repair all major cooling appliances, including ice makers and chest freezers."
+      },
+      {
+        "title": "Washer & Dryer",
+        "iconClass": "fa-solid fa-shirt",
+        "description": "From spinning issues to heating elements, we fix all clothes washer and dryer models."
+      },
+      {
+        "title": "Oven & Stovetop",
+        "iconClass": "fa-solid fa-fire-burner",
+        "description": "Gas or electric. We fix igniters, temperature sensors, and glass cooktops."
+      },
+      {
+        "title": "Small Appliances",
+        "iconClass": "fa-solid fa-sink",
+        "description": "Dishwashers, small kitchen appliances, and more. Quality installation and repair."
+      }
+    ]
+  },
+  "about": {
+    "badge": "Committed to Excellence",
+    "title": "Integrity, Fairness",
+    "titleHighlight": "& Responsibility",
+    "description1": "With over 5 years of experience, AJ's Appliance Repair, LLC is committed to excellence in every aspect of our business. We uphold a standard of integrity bound by fairness, honesty, and personal responsibility.",
+    "description2": "Our distinction is the quality of service we bring to our customers. Accurate knowledge of our trade combined with ability is what makes us true professionals. Above all, we are watchful of our customers' interests and make their concerns the basis of our business!",
+    "image": "https://cdn.homeadvisor.com/fs/files/eid/157920000/157927890/20034257_dlargesquare.png",
+    "imageQuote": "\"AJ diagnosed the problem quickly!\"",
+    "stats": [
+      { "value": "5+ Years", "label": "Of Experience" },
+      { "value": "4.9", "label": "Star Rating" }
+    ]
+  },
+  "serviceArea": {
+    "badge": "Service Area",
+    "title": "Where We Work",
+    "description": "Based in Las Cruces, we proudly serve homeowners and property managers within a <strong class=\"text-brand\">60-mile radius</strong> of Las Cruces, New Mexico.",
+    "locations": [
+      "Las Cruces",
+      "Mesilla",
+      "Sonoma Ranch",
+      "Picacho Hills",
+      "University Park",
+      "Talavera",
+      "Organ",
+      "Anthony, NM"
+    ],
+    "noteTitle": "Don't see your area?",
+    "noteText": "Contact us! We travel up to 60 miles for your convenience.",
+    "mapImage": "img/hero2.png",
+    "mapStatus": "Service Active Now"
+  },
+  "reviews": {
+    "title": "Trusted by Las Cruces",
+    "averageRating": "4.9",
+    "totalReviewsLabel": "Based on 40 Reviews",
+    "items": [
+      {
+        "text": "\"The gentleman who repaired my fridge was incredible. Very polite and handy, but also answer all my questions about its issues. Took his time to really make sure the fridge was working and appropriately fixed.\"",
+        "author": "Carolina G.",
+        "date": "Sep 2025"
+      },
+      {
+        "text": "\"Responded quickly & communicated well. AJ diagnosed the problem quickly and was honest in his appraisal & work.\"",
+        "author": "Mike D.",
+        "date": "Sep 2023"
+      }
+    ]
+  },
+  "quote": {
+    "badge": "Get A Quote",
+    "title": "Need a Repair?",
+    "description": "Don't let a broken appliance ruin your week. Fill out the form to get a free quote and schedule your repair.",
+    "contactLabel": "Get In Touch",
+    "addressLabel": "Address",
+    "hoursLabel": "Business Hours"
+  },
+  "footer": {
+    "text": "Honest work. Fair prices. <br> Proudly serving Las Cruces, NM since 2019."
+  }
+}

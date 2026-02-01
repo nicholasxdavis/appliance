@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Inject Configuration (Secrets)
+        env:
+          # Mapping valid GitHub Secrets to Environment Variables for the script
+          ENTRY0EMAIL1: ${{ secrets.ENTRY0EMAIL1 }}
+          ENTRY0PASSWORD1: ${{ secrets.ENTRY0PASSWORD1 }}
+          ENTRY0EMAIL2: ${{ secrets.ENTRY0EMAIL2 }}
+          ENTRY0PASSWORD2: ${{ secrets.ENTRY0PASSWORD2 }}
+          ENTRY0PASSOWRD2: ${{ secrets.ENTRY0PASSWORD2 }} # Mapping correct secret to typo var if needed, or just standard
+          GITHUB0API0KEY: ${{ secrets.GITHUB0API0KEY }}
+        run: node inject_config.js
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
