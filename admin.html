@@ -24,33 +24,40 @@
             --bn-border-radius: 24px;
         }
 
-        .modal-overlay {
+        .bn-welcome-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            display: flex;
+            background: rgba(0, 0, 0, 0.85); /* Deep dark semi-transparent */
+            backdrop-filter: blur(10px); /* Blur the behind content */
+            display: none; /* Controlled via JS */
             align-items: center;
             justify-content: center;
-            z-index: 9999; /* Ensure high z-index */
+            z-index: 99999999 !important; /* Extremely high to stay above everything */
             padding: 20px;
             animation: bnFadeIn 0.3s ease-out;
+            pointer-events: auto;
+        }
+
+        .bn-welcome-overlay.active {
+            display: flex;
         }
 
         .bn-popup {
             position: relative;
-            background: var(--bn-black);
+            background: #0a0a0a; /* Deep black/grey */
             width: 100%;
             max-width: 420px;
             border-radius: var(--bn-border-radius);
             padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
-            border: 1px solid #222;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 107, 0, 0.15);
+            border: 1px solid #333; /* Distinct border */
             animation: bnSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 999999999 !important;
+            pointer-events: auto;
         }
 
         .bn-close-btn {
@@ -308,43 +315,7 @@
         </div>
     </div>
 
-    <!-- BN POPUP COMPONENT -->
-    <div id="bnModal" class="modal-overlay hidden">
-        <div class="bn-popup">
-            <!-- Close Icon Top Right -->
-            <button class="bn-close-btn" onclick="closeBnPopup()" aria-label="Close">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-
-            <!-- Centered Logo -->
-            <div class="bn-logo-container">
-                <a href="https://www.blacnova.net" target="_blank" rel="noopener noreferrer">
-                    <img src="https://www.blacnova.net/img/logo_white.png" alt="Blacnova Logo">
-                </a>
-            </div>
-
-            <!-- Content -->
-            <h1 class="bn-h1">Welcome AJ's Appliance</h1>
-            <span class="bn-subtitle">To Your Admin Panel</span>
-
-            <p class="bn-message-body">
-                Thank you for being a valued client since <span class="bn-highlight-date">1/31/2026</span>.
-                <br><br>
-                You have been gifted <span class="bn-lifetime-badge">LIFETIME ACCESS</span> to Blacnova Development hosting services and CMS fees with included admin panel.
-            </p>
-
-            <button class="bn-action-btn" onclick="closeBnPopup()">
-                Access Panel
-            </button>
-            
-            <a href="https://www.blacnova.net/#contact" target="_blank" rel="noopener noreferrer" class="bn-contact-btn">
-                Contact Support
-            </a>
-        </div>
-    </div>
+    <!-- Moved popup content to script section area for cleaner management -->
 
     <script>
         // Popup Control Logic
@@ -353,15 +324,14 @@
             if (!hasSeenPopup) {
                 const modal = document.getElementById('bnModal');
                 if (modal) {
-                    modal.classList.remove('hidden');
-                    // Ensure it's on top of everything
-                    modal.style.zIndex = '9999';
+                    modal.classList.add('active');
                 }
             }
         }
 
         function closeBnPopup() {
-            document.getElementById('bnModal').classList.add('hidden');
+            const modal = document.getElementById('bnModal');
+            if (modal) modal.classList.remove('active');
             localStorage.setItem('bn_admin_popup_seen', 'true');
         }
     </script>
@@ -1298,5 +1268,42 @@
             modal.classList.remove('hidden');
         }
     </script>
+    <!-- BN POPUP COMPONENT (Placed at absolute end for best stacking) -->
+    <div id="bnModal" class="bn-welcome-overlay">
+        <div class="bn-popup">
+            <!-- Close Icon Top Right -->
+            <button class="bn-close-btn" onclick="closeBnPopup()" aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Centered Logo -->
+            <div class="bn-logo-container">
+                <a href="https://www.blacnova.net" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.blacnova.net/img/logo_white.png" alt="Blacnova Logo">
+                </a>
+            </div>
+
+            <!-- Content -->
+            <h1 class="bn-h1">Welcome AJ's Appliance</h1>
+            <span class="bn-subtitle" style="color: #ff6b00; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 25px; display: block;">To Your Admin Panel</span>
+
+            <p class="bn-message-body" style="color: #ccc; font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px;">
+                Thank you for being a valued client since <span class="bn-highlight-date" style="color: #fff; font-weight: 600; border-bottom: 1px solid #ff6b00;">1/31/2026</span>.
+                <br><br>
+                You have been gifted <span class="bn-lifetime-badge" style="display: inline-block; background: rgba(255, 107, 0, 0.15); color: #ff6b00; font-weight: 700; font-size: 0.8rem; padding: 4px 8px; border-radius: 6px; margin: 0 2px;">LIFETIME ACCESS</span> to Blacnova Development hosting services and CMS fees with included admin panel.
+            </p>
+
+            <button class="bn-action-btn" onclick="closeBnPopup()">
+                Access Panel
+            </button>
+            
+            <a href="https://www.blacnova.net/#contact" target="_blank" rel="noopener noreferrer" class="bn-contact-btn">
+                Contact Support
+            </a>
+        </div>
+    </div>
 </body>
 </html>
