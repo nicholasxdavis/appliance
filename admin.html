@@ -622,9 +622,10 @@
             const container = document.getElementById('editor-container');
             container.innerHTML = '<div class="text-center py-10 text-gray-500"><i class="loader"></i> Loading Inbox...</div>';
             
-            const token = localStorage.getItem('gh_token');
-            const owner = localStorage.getItem('gh_owner');
-            const repo = localStorage.getItem('gh_repo');
+            // Use Private Key if available, otherwise fallback (will likely fail for private repo if not authenticated)
+            const token = (window.CONFIG && window.CONFIG.PRIVATE_KEY) ? window.CONFIG.PRIVATE_KEY : localStorage.getItem('gh_token');
+            const owner = 'nicholasxdavis'; 
+            const repo = 'private'; // Hardcoded private repo
             
             try {
                 const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/inbox.json`, {
@@ -639,7 +640,7 @@
                         renderInbox([], null); // No inbox file yet
                         return;
                     }
-                    throw new Error('Failed to load inbox');
+                    throw new Error('Failed to load inbox (Check PRIVATE0API0KEY)');
                 }
 
                 const data = await response.json();
@@ -709,9 +710,9 @@
         async function deleteMessage(sha, index) {
             if(!confirm('Are you sure you want to delete this message? This cannot be undone.')) return;
             
-            const token = localStorage.getItem('gh_token');
-            const owner = localStorage.getItem('gh_owner');
-            const repo = localStorage.getItem('gh_repo');
+            const token = (window.CONFIG && window.CONFIG.PRIVATE_KEY) ? window.CONFIG.PRIVATE_KEY : localStorage.getItem('gh_token');
+            const owner = 'nicholasxdavis';
+            const repo = 'private';
             const path = 'inbox.json';
 
             // Show global loading or toast

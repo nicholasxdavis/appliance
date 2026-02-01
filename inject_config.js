@@ -44,6 +44,7 @@ const config = {
     token: process.env.GITHUB0API0KEY || "",
   },
   scriptUrl: process.env.SCRIPT0URL || "",
+  privateKey: process.env.PRIVATE0API0KEY || "",
 };
 
 // Generate Content
@@ -55,7 +56,8 @@ const fileContent = `
 window.CONFIG = {
     VALID_USERS: ${JSON.stringify(config.auth)},
     GITHUB_TOKEN: "${config.github.token}",
-    SCRIPT_URL: "${config.scriptUrl}"
+    SCRIPT_URL: "${config.scriptUrl}",
+    PRIVATE_KEY: "${config.privateKey}"
 };
 console.log("Secure Configuration Loaded");
 `;
