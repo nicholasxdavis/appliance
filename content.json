@@ -196,6 +196,21 @@
       "img/hero.png"
     ]
   },
+  "blog": {
+    "visible": false,
+    "title": "Latest News & Tips",
+    "description": "Expert advice on appliance maintenance and company updates.",
+    "posts": [
+      {
+        "id": "post-1",
+        "title": "5 Tips to Extend Your Refrigerator's Life",
+        "date": "Oct 12, 2025",
+        "coverImage": "img/hero.png",
+        "excerpt": "Simple maintenance steps you can take today to prevent costly repairs later.",
+        "content": "<p>Your refrigerator is the hardest working appliance in your home. It runs 24/7. Here are 5 tips to keep it running smoothly:</p><ul class='list-disc pl-5 my-4 space-y-2'><li>Clean the condenser coils every 6 months.</li><li>Check the door seals for gaps.</li><li>Keep the temperature between 37-40°F.</li><li>Don't overstuff it - air needs to circulate.</li><li>Change the water filter regularly.</li></ul><p>If you notice it running loud or not cooling, call us immediately!</p>"
+      }
+    ]
+  },
   "quote": {
     "visible": true,
     "badge": "Get A Quote",

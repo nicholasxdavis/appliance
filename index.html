@@ -692,6 +692,51 @@
         </div>
     </section>
 
+    <!-- Blog / News Section -->
+    <section id="blog" class="py-24 bg-white border-b border-stone-200" style="display: none;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+             <div class="text-center mb-16">
+                <span class="text-brand font-medium tracking-widest uppercase text-xs mb-2 block">Company Updates</span>
+                <h2 class="text-4xl md:text-5xl font-medium text-stone-900 mb-6" id="blog-title"></h2>
+                <div class="w-24 h-1 bg-brand mx-auto"></div>
+                <p class="mt-8 text-stone-600 max-w-2xl mx-auto text-lg leading-relaxed font-light" id="blog-description"></p>
+            </div>
+            
+            <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Posts injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Post Reader Overlay (SPA Style) -->
+    <div id="post-viewer" class="fixed inset-0 bg-white z-[60] hidden overflow-y-auto animate__animated animate__fadeIn">
+        <!-- Close Button -->
+        <button onclick="window.location.hash=''" class="fixed top-6 right-6 z-[70] bg-stone-100 hover:bg-stone-200 p-3 rounded-full transition shadow-md">
+            <i class="fa-solid fa-xmark text-xl text-stone-600"></i>
+        </button>
+        
+        <!-- Post Content Container -->
+        <div class="max-w-4xl mx-auto px-4 py-24 sm:px-6 lg:px-8">
+             <div class="text-center mb-12">
+                 <span id="post-date" class="text-brand font-medium tracking-widest uppercase text-xs mb-4 block"></span>
+                 <h1 id="post-title" class="text-4xl md:text-6xl font-medium text-stone-900 mb-8 leading-tight"></h1>
+                 <img id="post-cover" src="" class="w-full h-[400px] object-cover rounded-2xl shadow-xl mb-12">
+             </div>
+             
+             <!-- Body Content -->
+             <div id="post-body" class="prose prose-lg prose-stone mx-auto font-light leading-relaxed">
+                 <!-- HTML Content injected here -->
+             </div>
+             
+             <!-- Footer Navigation -->
+             <div class="mt-16 pt-8 border-t border-stone-200 text-center">
+                 <a href="#blog" onclick="window.location.hash=''" class="text-brand hover:text-brandDark font-medium flex items-center justify-center gap-2">
+                     <i class="fa-solid fa-arrow-left"></i> Back to News
+                 </a>
+             </div>
+        </div>
+    </div>
+
     <!-- Quote Section -->
     <section id="quote" class="py-24 bg-stone-900 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1111,6 +1156,95 @@
             data.nav.contactUs;
           document.getElementById("mobile-nav-getFreeQuote").textContent =
             data.nav.getFreeQuote;
+            
+          // Gallery Rendering (Initial)
+          if(data.gallery) {
+              document.getElementById("gallery-title").textContent = data.gallery.title;
+              document.getElementById("gallery-description").textContent = data.gallery.description;
+              
+              const grid = document.getElementById("gallery-grid");
+              if (grid && data.gallery.images) {
+                  const imgs = data.gallery.images;
+                  const count = imgs.length;
+                  let html = '';
+                  
+                  imgs.forEach((img, idx) => {
+                      let classes = 'relative overflow-hidden group rounded-xl shadow-lg h-full min-h-[300px]';
+                      if (count === 1) classes += ' col-span-full row-span-2 md:min-h-[600px]';
+                      else if (count === 2) classes += ' col-span-1 md:col-span-1 min-h-[400px]';
+                      else if (count === 3 && idx === 0) classes += ' md:col-span-2 md:row-span-2';
+                      else classes += ' col-span-1';
+
+                      html += `
+                          <div class="${classes}">
+                              <img src="${img}" alt="Gallery Image ${idx + 1}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+                          </div>
+                      `;
+                  });
+                  grid.innerHTML = html;
+              }
+          }
+
+          // Blog Rendering (Initial)
+          if (data.blog) {
+             document.getElementById("blog-title").textContent = data.blog.title;
+             document.getElementById("blog-description").textContent = data.blog.description;
+             
+             const blogGrid = document.getElementById('blog-grid');
+             if (blogGrid && data.blog.posts) {
+                 blogGrid.innerHTML = data.blog.posts.map(post => `
+                    <div class="group cursor-pointer flex flex-col h-full" onclick="window.location.hash='${post.id}'">
+                        <div class="overflow-hidden rounded-xl shadow-sm mb-6 h-64 relative">
+                             <img src="${post.coverImage}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                             <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition z-10"></div>
+                        </div>
+                        <span class="text-xs font-bold text-brand uppercase tracking-widest mb-3">${post.date}</span>
+                        <h3 class="text-2xl font-medium text-stone-900 mb-3 group-hover:text-brand transition-colors">${post.title}</h3>
+                        <p class="text-stone-500 font-light leading-relaxed flex-grow">${post.excerpt}</p>
+                        <span class="text-stone-400 text-sm font-medium mt-6 group-hover:text-stone-800 transition flex items-center gap-2">Read Article <i class="fa-solid fa-arrow-right text-brand"></i></span>
+                    </div>
+                 `).join('');
+             }
+          }
+          
+          // Setup Hash Link Handler
+          window.currentCMSData = data; // Global store
+          window.addEventListener('hashchange', window.handleHashChange);
+          // Define handleHashChange just in case it wasn't defined by the preview script yet (unlikely, but safe)
+          if (!window.handleHashChange) {
+              window.handleHashChange = function() {
+                  const hash = window.location.hash.slice(1);
+                  const viewer = document.getElementById('post-viewer');
+                  const body = document.body;
+                  
+                  if (!hash) {
+                      if (viewer) {
+                          viewer.classList.add('hidden');
+                          body.classList.remove('overflow-hidden');
+                      }
+                      return;
+                  }
+    
+                  const currentData = window.currentCMSData;
+                  if (!currentData || !currentData.blog || !currentData.blog.posts) return;
+    
+                  const post = currentData.blog.posts.find(p => p.id === hash);
+                  if (post) {
+                      if (viewer) {
+                          viewer.classList.remove('hidden');
+                          body.classList.add('overflow-hidden');
+                          document.getElementById('post-date').textContent = post.date;
+                          document.getElementById('post-title').textContent = post.title;
+                          document.getElementById('post-cover').src = post.coverImage;
+                          document.getElementById('post-body').innerHTML = post.content;
+                      }
+                  }
+              };
+          }
+          // Initial check
+          window.handleHashChange();
+
 
           // Hero
           document.getElementById("hero-title-prefix").textContent =
@@ -1603,28 +1737,14 @@
               if (grid && data.gallery.images) {
                   const imgs = data.gallery.images;
                   const count = imgs.length;
-                  
-                  // Layout Logic
-                  // 1 img: col-span-full row-span-2 (big hero)
-                  // 2 img: both col-span-1
-                  // 3 img: first col-span-2 row-span-2, others stack? Or just simple 3 cols.
-                  
-                  // Let's go with a logic that ensures it looks "full"
                   let html = '';
                   
                   imgs.forEach((img, idx) => {
                       let classes = 'relative overflow-hidden group rounded-xl shadow-lg h-full min-h-[300px]';
-                      
-                      if (count === 1) {
-                          classes += ' col-span-full row-span-2 md:min-h-[600px]';
-                      } else if (count === 2) {
-                          classes += ' col-span-1 md:col-span-1 min-h-[400px]';
-                      } else if (count === 3 && idx === 0) {
-                          // First image takes 2 cols on large screens
-                          classes += ' md:col-span-2 md:row-span-2';
-                      } else {
-                          classes += ' col-span-1';
-                      }
+                      if (count === 1) classes += ' col-span-full row-span-2 md:min-h-[600px]';
+                      else if (count === 2) classes += ' col-span-1 md:col-span-1 min-h-[400px]';
+                      else if (count === 3 && idx === 0) classes += ' md:col-span-2 md:row-span-2';
+                      else classes += ' col-span-1';
 
                       html += `
                           <div class="${classes}">
@@ -1636,6 +1756,77 @@
                   grid.innerHTML = html;
               }
           }
+
+          // Blog
+          if (data.blog && data.blog.visible !== undefined) {
+             const blog = document.getElementById('blog');
+             if(blog) blog.style.display = data.blog.visible ? 'block' : 'none';
+          }
+          if (data.blog) {
+             setText("blog-title", data.blog.title);
+             setText("blog-description", data.blog.description);
+             
+             const blogGrid = document.getElementById('blog-grid');
+             if (blogGrid && data.blog.posts) {
+                 blogGrid.innerHTML = data.blog.posts.map(post => `
+                    <div class="group cursor-pointer flex flex-col h-full" onclick="window.location.hash='${post.id}'">
+                        <div class="overflow-hidden rounded-xl shadow-sm mb-6 h-64 relative">
+                             <img src="${post.coverImage}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                             <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition z-10"></div>
+                        </div>
+                        <span class="text-xs font-bold text-brand uppercase tracking-widest mb-3">${post.date}</span>
+                        <h3 class="text-2xl font-medium text-stone-900 mb-3 group-hover:text-brand transition-colors">${post.title}</h3>
+                        <p class="text-stone-500 font-light leading-relaxed flex-grow">${post.excerpt}</p>
+                        <span class="text-stone-400 text-sm font-medium mt-6 group-hover:text-stone-800 transition flex items-center gap-2">Read Article <i class="fa-solid fa-arrow-right text-brand"></i></span>
+                    </div>
+                 `).join('');
+             }
+          }
+
+          // Global Hash Handler for Deep Linking / Modal
+          window.handleHashChange = function() {
+              const hash = window.location.hash.slice(1); // remove #
+              const viewer = document.getElementById('post-viewer');
+              const body = document.body;
+              
+              if (!hash) {
+                  // Close viewer
+                  if (viewer) {
+                      viewer.classList.add('hidden');
+                      body.classList.remove('overflow-hidden'); 
+                  }
+                  return;
+              }
+
+              // Assume hash is postId
+              // We need access to 'data' object. Since 'data' is scoped here, we can attach it to window OR re-fetch.
+              // For live preview scenerio (this block), we have 'data'. 
+              // BUT for initial load, this runs inside the fetch. 
+              // Let's rely on window.currentCMSData which we will set.
+              
+              const currentData = window.currentCMSData || data; 
+              if (!currentData || !currentData.blog || !currentData.blog.posts) return;
+
+              const post = currentData.blog.posts.find(p => p.id === hash);
+              if (post) {
+                  if (viewer) {
+                      viewer.classList.remove('hidden');
+                      body.classList.add('overflow-hidden');
+                      
+                      // Populate Viewer
+                      document.getElementById('post-date').textContent = post.date;
+                      document.getElementById('post-title').textContent = post.title;
+                      document.getElementById('post-cover').src = post.coverImage;
+                      document.getElementById('post-body').innerHTML = post.content;
+                  }
+              }
+          };
+          
+          // Expose data for the hash handler
+          window.currentCMSData = data;
+          
+          // Trigger once in case we loaded with a hash
+          window.handleHashChange();
 
           // Quote & Footer
           if (data.quote && data.quote.visible !== undefined) {
