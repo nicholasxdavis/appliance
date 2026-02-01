@@ -504,6 +504,7 @@
         }
 
         function createInput(container, value, path, isImage = false) {
+            let input; // Fix: Declare variable before usage
             const wrapper = document.createElement('div');
             wrapper.className = 'mb-4 group';
 
@@ -543,7 +544,6 @@
                 return; // Early return for boolean
             }
 
-            let input;
             if (typeof value === 'string' && value.length > 60 && !isImage) {
                 input = document.createElement('textarea');
                 input.rows = 3;
