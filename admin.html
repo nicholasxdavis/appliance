@@ -241,8 +241,8 @@
                  }
                  
                  // Auto-fill GitHub Token if available
-                 if (window.CONFIG.github && window.CONFIG.github.token && !localStorage.getItem('gh_token')) {
-                     document.getElementById('github-token').value = window.CONFIG.github.token;
+                 if (window.CONFIG.GITHUB_TOKEN && !localStorage.getItem('gh_token')) {
+                     document.getElementById('github-token').value = window.CONFIG.GITHUB_TOKEN;
                  }
              } else {
                  // Config missing detector
@@ -304,7 +304,7 @@
             document.getElementById('app-login-section').classList.add('hidden');
             
             // 1. Try LocalStorage (Existing session) or Injected Config (Auto-login)
-            const token = localStorage.getItem('gh_token') || (window.CONFIG && window.CONFIG.github && window.CONFIG.github.token);
+            const token = localStorage.getItem('gh_token') || (window.CONFIG && window.CONFIG.GITHUB_TOKEN);
             
             // Allow override of owner/repo if injected via config (not currently set but future proof)
             const owner = localStorage.getItem('gh_owner') || 'nicholasxdavis';
@@ -358,7 +358,9 @@
                 console.error(error);
                 document.getElementById('login-error').textContent = error.message;
                 document.getElementById('login-error').classList.remove('hidden');
-                logout(); // Clear bad creds
+                // Show auth section so user can see error and retry manually if needed
+                document.getElementById('auth-section').classList.remove('hidden'); 
+                localStorage.removeItem('gh_token'); 
             } finally {
                 if(btn) { btn.disabled = false; btn.textContent = 'Connect Dashboard'; }
             }
