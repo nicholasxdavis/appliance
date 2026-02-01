@@ -1,65 +1,74 @@
-// 1. Copy this content
-// 2. Go to https://script.google.com/home
-// 3. New Project -> Paste this code
-// 4. Update the CONFIG object below with your details
-// 5. Deploy -> New Deployment -> Web App -> execute as "Me" -> Access "Anyone"
-// 6. Copy the "Web App URL" and paste it into your Admin Panel (Global Settings)
-
 const CONFIG = {
-  GITHUB_TOKEN: "YOUR_GITHUB_TOKEN_HERE", // Paste your GITHUB0API0KEY
-  REPO_OWNER: "nicholasxdavis",
-  REPO_NAME: "appliance",
-  FILE_PATH: "inbox.json"
+  GITHUB_TOKEN: "YOUR_GITHUB_TOKEN_HERE", // Keep the "ghp_" part
+  REPO_OWNER: "nicholasxdavis",           // e.g. "nicholasxdavis"
+  REPO_NAME: "appliance"                  // e.g. "appliance"
 };
 
+// DO NOT EDIT BELOW THIS LINE
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+    const type = data.type || "Contact";
     
-    // 1. Get current inbox content
-    const getUrl = `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${CONFIG.FILE_PATH}`;
-    const getOptions = {
+    // 1. Get existing inbox.json
+    const url = `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/inbox.json`;
+    const options = {
       method: "get",
-      headers: { "Authorization": "token " + CONFIG.GITHUB_TOKEN }
+      headers: {
+        "Authorization": "token " + CONFIG.GITHUB_TOKEN,
+        "Accept": "application/vnd.github.v3+json"
+      }
     };
     
-    const getRes = UrlFetchApp.fetch(getUrl, getOptions);
-    const fileData = JSON.parse(getRes.getContentText());
-    const currentInbox = JSON.parse(Utilities.newBlob(Utilities.base64Decode(fileData.content)).getDataAsString());
+    const response = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+    
+    // Check if file exists, if not initialize empty
+    let messages = [];
+    let sha = null;
+    
+    if (response.getResponseCode() === 200) {
+      const json = JSON.parse(response.getContentText());
+      sha = json.sha;
+      const decoded = Utilities.base64Decode(json.content);
+      const jsonStr = Utilities.newBlob(decoded).getDataAsString();
+      messages = JSON.parse(jsonStr);
+    }
     
     // 2. Add new message
     const newMessage = {
-      id: "msg_" + new Date().getTime(),
+      id: new Date().getTime().toString(),
       date: new Date().toISOString(),
-      name: data.name || "Anonymous",
-      email: data.email || "No Email",
-      phone: data.phone || "No Phone",
-      message: data.message || "",
-      type: data.type || "Contact" // 'Quote' or 'Contact'
+      type: type,
+      name: data.name,
+      email: data.email,
+      phone: data.phone || "",
+      message: data.message,
+      service: data.service || "" // For quotes
     };
     
-    currentInbox.unshift(newMessage); // Add to top
+    messages.unshift(newMessage); // Add to top
     
     // 3. Save back to GitHub
-    const updatedContent = Utilities.base64Encode(JSON.stringify(currentInbox, null, 2));
+    const newContent = Utilities.base64Encode(JSON.stringify(messages, null, 2));
+    
     const payload = {
-      message: `New Web Form Submission: ${newMessage.name}`,
-      content: updatedContent,
-      sha: fileData.sha
+      message: `New ${type} Form Submission: ${data.name}`,
+      content: newContent,
+      sha: sha // Required if updating
     };
     
     const putOptions = {
       method: "put",
-      headers: { 
+      headers: {
         "Authorization": "token " + CONFIG.GITHUB_TOKEN,
-        "Content-Type": "application/json"
+        "Accept": "application/vnd.github.v3+json"
       },
       payload: JSON.stringify(payload)
     };
     
-    UrlFetchApp.fetch(getUrl, putOptions);
+    UrlFetchApp.fetch(url, putOptions);
     
-    // 4. Return success
+    // Return Success (CORS workaround)
     return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
       .setMimeType(ContentService.MimeType.JSON);
       
@@ -69,11 +78,8 @@ function doPost(e) {
   }
 }
 
-// Enable CORS for browser requests
 function doOptions(e) {
+  // Handle CORS preflight
   return ContentService.createTextOutput("")
-    .setMimeType(ContentService.MimeType.TEXT)
-    .append("Access-Control-Allow-Origin: *")
-    .append("Access-Control-Allow-Methods: POST, GET, OPTIONS")
-    .append("Access-Control-Allow-Headers: Content-Type");
+    .setMimeType(ContentService.MimeType.TEXT);
 }
