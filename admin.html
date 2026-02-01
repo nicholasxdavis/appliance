@@ -211,15 +211,19 @@
         function showGitHubAuth() {
             document.getElementById('app-login-section').classList.add('hidden');
             
-            // Check if already GitHub authenticated
-            const token = localStorage.getItem('gh_token');
-            const owner = localStorage.getItem('gh_owner');
-            const repo = localStorage.getItem('gh_repo');
+            // 1. Try LocalStorage (Existing session) or Injected Config (Auto-login)
+            const token = localStorage.getItem('gh_token') || (window.CONFIG && window.CONFIG.github && window.CONFIG.github.token);
+            
+            // Allow override of owner/repo if injected via config (not currently set but future proof)
+            const owner = localStorage.getItem('gh_owner') || 'nicholasxdavis';
+            const repo = localStorage.getItem('gh_repo') || 'appliance';
 
-            if (token && owner && repo) {
+            if (token) {
+                // Pre-fill inputs just in case, but hide section ideally
                 document.getElementById('github-token').value = token;
                 document.getElementById('repo-owner').value = owner;
-                document.getElementById('repo-name').value = repo;
+                document.getElementById('repo-name').value = repo; 
+                
                 attemptLogin(token, owner, repo);
             } else {
                 document.getElementById('auth-section').classList.remove('hidden');
