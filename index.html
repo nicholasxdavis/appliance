@@ -1046,6 +1046,20 @@
           const data = await response.json();
 
           // Populate elements based on data object
+          
+          // Maintenance Mode Check (Initial Load)
+          if (data.maintenance && data.maintenance.enabled) {
+              const overlay = document.getElementById('maintenance-overlay');
+              const body = document.getElementById('page-body');
+              if (overlay) {
+                  overlay.classList.remove('hidden');
+                  document.getElementById('maint-title').textContent = data.maintenance.title;
+                  document.getElementById('maint-message').textContent = data.maintenance.message;
+              }
+              // We hide the main body entirely for real users
+              if(body) body.style.display = 'none'; 
+              return; // Stop rendering the rest of the site
+          }
         
         // Visibility Flags (Initial Load)
         const toggles = {
@@ -1641,8 +1655,32 @@
           setHTML("footer-text", data.footer.text);
           setText("footer-link-home", data.nav.home);
           setText("footer-link-services", data.nav.services);
+          
+          // Maintenance Mode Logic (Live Preview)
+           if (data.maintenance) {
+              const overlay = document.getElementById('maintenance-overlay');
+              const body = document.getElementById('page-body');
+              if (overlay && body) {
+                  if (data.maintenance.enabled) {
+                      overlay.classList.remove('hidden');
+                      body.classList.add('blur-sm', 'pointer-events-none'); // Blur background instead of hiding to keep preview context
+                      document.getElementById('maint-title').textContent = data.maintenance.title;
+                      document.getElementById('maint-message').textContent = data.maintenance.message;
+                  } else {
+                      overlay.classList.add('hidden');
+                      body.classList.remove('blur-sm', 'pointer-events-none');
+                  }
+              }
+           }
         }
       });
     </script>
+    
+    <!-- Maintenance Overlay -->
+    <div id="maintenance-overlay" class="fixed inset-0 bg-stone-900 z-[100] flex flex-col items-center justify-center text-center p-6 hidden transition-all duration-500">
+        <i class="fa-solid fa-screwdriver-wrench text-6xl text-brand mb-8 animate-pulse"></i>
+        <h1 id="maint-title" class="text-4xl md:text-5xl font-bold text-white mb-4"></h1>
+        <p id="maint-message" class="text-stone-400 text-xl max-w-lg font-light"></p>
+    </div>
   </body>
 </html>

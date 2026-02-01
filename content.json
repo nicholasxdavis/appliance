@@ -14,6 +14,11 @@
       "instagram": "#"
     }
   },
+  "maintenance": {
+    "enabled": false,
+    "title": "Under Maintenance",
+    "message": "We are currently updating our website to serve you better. Check back soon!"
+  },
   "nav": {
     "home": "Home",
     "brands": "Brands",
