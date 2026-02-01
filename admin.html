@@ -139,6 +139,19 @@
         <span id="toast-msg">Notification</span>
     </div>
 
+    <!-- Help Modal -->
+    <div id="help-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full relative">
+            <button onclick="document.getElementById('help-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark fa-lg"></i>
+            </button>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">Section Help</h3>
+            <div id="help-content" class="space-y-4">
+                <!-- Help content will be injected here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Load Config (Injected Secrets) -->
     <script src="js/config.js"></script> <!-- Will fail silently if not present, which is fine -->
 
@@ -149,6 +162,70 @@
         let activeTab = 'general';
         const previewFrame = document.getElementById('preview-frame');
 
+        // SECTION INFO & PREVIEWS
+        const SECTION_INFO = {
+            'general': {
+                title: 'General Settings',
+                desc: 'Controls global settings like the website title, description (for SEO), and main contact info.',
+                html: '<div class="p-4 border border-blue-200 rounded bg-blue-50 text-center"><h3 class="font-bold text-lg">Website Title</h3><p class="text-xs text-gray-500">Meta Description for Google...</p></div>'
+            },
+            'hero': {
+                title: 'Hero / Banner',
+                desc: 'The top-most section of your home page. This is the first thing visitors see.',
+                html: '<div class="h-32 bg-gray-800 text-white flex flex-col items-center justify-center rounded"><h1 class="text-xl font-bold">Main Title</h1><button class="mt-2 bg-yellow-500 text-xs px-2 py-1 rounded">Call to Action</button></div>'
+            },
+            'trust': {
+                title: 'Trust Indicators',
+                desc: 'Logos of organizations you are affiliated with (e.g., Angi, BBB) to build credibility.',
+                html: '<div class="h-16 bg-gray-100 flex items-center justify-center gap-4 rounded border border-gray-200"><div class="w-8 h-8 bg-gray-300 rounded-full"></div><div class="w-8 h-8 bg-gray-300 rounded-full"></div><div class="w-8 h-8 bg-gray-300 rounded-full"></div></div>'
+            },
+            'brands': {
+                title: 'Brands We Servic',
+                desc: 'A scrolling list of appliance brands you repair.',
+                html: '<div class="h-20 border border-dashed border-gray-300 rounded flex items-center justify-around overflow-hidden"><span class="text-xs text-gray-400">Samsung</span><span class="text-xs text-gray-400">LG</span><span class="text-xs text-gray-400">Whirlpool</span></div>'
+            },
+            'services': {
+                title: 'Our Services',
+                desc: 'The core services you offer. Each item has an icon, title, and description.',
+                html: '<div class="grid grid-cols-2 gap-2"><div class="p-2 border rounded bg-white"><div class="w-4 h-4 bg-blue-100 mb-1"></div><div class="h-2 w-12 bg-gray-200 mb-1"></div><div class="h-8 w-full bg-gray-50"></div></div><div class="p-2 border rounded bg-white"><div class="w-4 h-4 bg-blue-100 mb-1"></div><div class="h-2 w-12 bg-gray-200 mb-1"></div><div class="h-8 w-full bg-gray-50"></div></div></div>'
+            },
+            'about': {
+                title: 'About Us',
+                desc: 'Your company story, image, and key stats.',
+                html: '<div class="flex gap-2"><div class="w-1/3 bg-gray-200 h-24 rounded"></div><div class="flex-1 space-y-2"><div class="h-4 w-3/4 bg-gray-200"></div><div class="h-12 w-full bg-gray-50 text-[6px] p-1">Your story goes here...</div></div></div>'
+            },
+             'serviceArea': {
+                title: 'Service Area',
+                desc: 'Map and list of cities you serve.',
+                html: '<div class="flex gap-2"><div class="w-1/2 bg-green-50 border border-green-100 h-24 rounded flex items-center justify-center text-xs text-green-700">Map Image</div><ul class="w-1/2 text-[8px] space-y-1"><li class="flex gap-1"><span class="w-1 h-1 bg-green-500 rounded-full"></span> Las Cruces</li><li class="flex gap-1"><span class="w-1 h-1 bg-green-500 rounded-full"></span> Mesilla</li></ul></div>'
+            },
+            'reviews': {
+                title: 'Customer Reviews',
+                desc: 'Testimonials from your happy customers.',
+                html: '<div class="p-2 border-l-4 border-yellow-400 bg-gray-50 rounded-r"><div class="flex text-yellow-400 text-[8px] gap-0.5 mb-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div><p class="text-[8px] text-gray-600">"Great service!" - Bob</p></div>'
+            },
+             'gallery': {
+                title: 'Photo Gallery',
+                desc: 'A collage of photos showing your recent work.',
+                html: '<div class="grid grid-cols-3 gap-1 h-24"><div class="bg-gray-300 col-span-2 row-span-2 rounded"></div><div class="bg-gray-200 rounded"></div><div class="bg-gray-200 rounded"></div></div>'
+            },
+             'blog': {
+                title: 'Blog / News',
+                desc: 'Articles and updates. Good for SEO and keeping customers informed.',
+                html: '<div class="grid grid-cols-2 gap-2"><div class="border rounded p-2"><div class="h-12 bg-gray-200 mb-2 rounded"></div><div class="h-2 w-16 bg-gray-300 mb-1"></div><div class="h-2 w-10 bg-gray-200"></div></div><div class="border rounded p-2"><div class="h-12 bg-gray-200 mb-2 rounded"></div><div class="h-2 w-16 bg-gray-300 mb-1"></div><div class="h-2 w-10 bg-gray-200"></div></div></div>'
+            },
+            'quote': {
+                title: 'Get a Quote',
+                desc: 'The bottom section containing the contact form/footer.',
+                html: '<div class="bg-gray-800 h-24 text-white flex items-center justify-center"><div class="text-center"><div class="text-[8px] uppercase">Contact Us</div><div class="text-xs font-bold">555-0123</div></div></div>'
+            },
+             'nav': { title: 'Navigation', desc: 'Links in the top header.', html: '' },
+             'footer': { title: 'Footer', desc: 'Bottom copyright text.', html: '' },
+             'maintenance': { title: 'Maintenance Mode', desc: 'Lock the site with an overlay message.', html: '<div class="h-24 bg-gray-900 flex items-center justify-center text-white"><i class="fa-solid fa-lock mr-2"></i> Under Maintenance</div>' }
+        };
+
+        async function init() {
+            // Check for maintenance mode
         // Credentials Configuration
         const VALID_USERS = [];
 
@@ -775,6 +852,30 @@
             updatePreview();
         }
 
+        function showHelp(key) {
+            const info = SECTION_INFO[key];
+            if (!info) return;
+            
+            const modal = document.getElementById('help-modal');
+            const content = document.getElementById('help-content');
+            
+            content.innerHTML = `
+                <div class="mb-6">
+                    <p class="text-gray-600 leading-relaxed">${info.desc}</p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Visual Preview</h4>
+                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 flex items-center justify-center overflow-hidden">
+                        <div class="transform scale-100 origin-center w-full max-w-md">
+                            ${info.html}
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center"><i class="fa-solid fa-info-circle"></i> Simplified representation</p>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
