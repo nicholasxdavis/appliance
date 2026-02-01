@@ -25,11 +25,23 @@
                     <span class="text-xl font-bold text-gray-800">Admin Panel</span>
                     <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full hidden" id="connection-status">Connected</span>
                 </div>
+                <!-- Right Side Controls -->
                 <div class="flex items-center gap-4">
-                    <button onclick="saveContent()" id="save-btn" class="hidden bg-green-600 text-white px-4 py-1.5 text-sm rounded-md hover:bg-green-700 transition flex items-center gap-2">
-                        <i class="fa-solid fa-save"></i> Save Changes
+                    <input type="file" id="backup-input" accept=".json" class="hidden" onchange="importBackup(this)">
+                    
+                    <button onclick="document.getElementById('backup-input').click()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm flex items-center gap-2 text-white">
+                        <i class="fa-solid fa-file-import"></i> Restore Backup
                     </button>
-                    <button onclick="logout()" class="text-gray-500 hover:text-red-500 text-sm">
+                    <button onclick="downloadBackup()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm flex items-center gap-2 text-white">
+                        <i class="fa-solid fa-download"></i> Backup JSON
+                    </button>
+                    
+                    <div class="h-6 w-px bg-gray-600 mx-2"></div>
+                    
+                    <button id="save-btn" onclick="saveContent()" class="hidden bg-green-600 hover:bg-green-500 px-6 py-2 rounded font-bold transition flex items-center gap-2 shadow-lg hover:shadow-green-500/20 text-white">
+                        <i class="fa-solid fa-cloud-upload"></i> Save Changes
+                    </button>
+                    <button onclick="logout()" class="text-gray-400 hover:text-red-500 text-sm">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
@@ -348,6 +360,46 @@
              previewFrameEl.onload = () => {
                  setTimeout(updatePreview, 500);
              };
+        }
+
+        // Backup & Restore
+        function downloadBackup() {
+            if (!currentContent) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentContent, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "cms_backup_" + new Date().toISOString().slice(0,10) + ".json");
+            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importBackup(inputElement) {
+            const file = inputElement.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    // Basic validation
+                    if (!json.general || !json.hero) {
+                        alert("Invalid backup file. Missing core sections.");
+                        return;
+                    }
+                    
+                    if (confirm("This will replace all current content in the editor with the backup. Proceed?")) {
+                        currentContent = json;
+                        renderEditor(currentContent);
+                        updatePreview();
+                        alert("Backup loaded! Click 'Save Changes' to push to GitHub.");
+                    }
+                } catch (err) {
+                    alert("Error parsing JSON: " + err.message);
+                }
+                inputElement.value = ''; // Reset
+            };
+            reader.readAsText(file);
         }
 
         async function saveContent() {

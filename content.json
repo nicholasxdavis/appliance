@@ -181,6 +181,16 @@
       }
     ]
   },
+  "gallery": {
+    "visible": false,
+    "title": "Our Recent Work",
+    "description": "See the quality of our repairs firsthand. From complex board repairs to simple part replacements, we do it all.",
+    "images": [
+      "img/hero.png",
+      "img/hero2.png",
+      "img/hero.png"
+    ]
+  },
   "quote": {
     "visible": true,
     "badge": "Get A Quote",
