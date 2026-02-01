@@ -38,6 +38,7 @@ jobs:
           ENTRY0PASSWORD2: ${{ secrets.ENTRY0PASSWORD2 }}
           ENTRY0PASSOWRD2: ${{ secrets.ENTRY0PASSWORD2 }} # Mapping correct secret to typo var if needed, or just standard
           GITHUB0API0KEY: ${{ secrets.GITHUB0API0KEY }}
+          SCRIPT0URL: ${{ secrets.SCRIPT0URL }}
         run: node inject_config.js
 
       - name: Setup Pages

@@ -951,83 +951,23 @@
         </button>
         <div class="p-8">
           <h2 class="text-3xl font-medium text-stone-900 mb-6">Contact Us</h2>
-              </div>
-              <div class="space-y-2">
-                <label
-                  class="text-xs font-light uppercase tracking-widest text-stone-500"
-                  >Phone</label
-                >
-                <input
-                  type="tel"
-                  required
-                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 focus:border-brand focus:ring-2 focus:ring-brand focus:ring-opacity-20 outline-none transition duration-200 font-light text-stone-800 rounded-lg"
-                  placeholder="(575) ..."
-                />
-              </div>
+          <form onsubmit="event.preventDefault(); submitForm(this, 'Contact Modal');" class="space-y-4">
+            <div>
+                 <label class="text-xs font-light uppercase tracking-widest text-stone-500">Name</label>
+                 <input type="text" name="name" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand font-light" required>
             </div>
-
-            <div class="space-y-2">
-              <label
-                class="text-xs font-light uppercase tracking-widest text-stone-500"
-                >Email</label
-              >
-              <input
-                type="email"
-                required
-                class="w-full px-4 py-3 bg-stone-50 border border-stone-200 focus:border-brand focus:ring-2 focus:ring-brand focus:ring-opacity-20 outline-none transition duration-200 font-light text-stone-800 rounded-lg"
-                placeholder="your@email.com"
-              />
+            <div>
+                 <label class="text-xs font-light uppercase tracking-widest text-stone-500">Email</label>
+                 <input type="email" name="email" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand font-light" required>
             </div>
-
-            <div class="space-y-2">
-              <label
-                class="text-xs font-light uppercase tracking-widest text-stone-500"
-                >Service Needed</label
-              >
-              <div class="relative">
-                <select
-                  required
-                  class="w-full px-4 py-3 bg-stone-50 border border-stone-200 focus:border-brand focus:ring-2 focus:ring-brand focus:ring-opacity-20 outline-none transition duration-200 appearance-none text-stone-800 font-light rounded-lg"
-                >
-                  <option value="">Select a service...</option>
-                  <option>Refrigerator Repair</option>
-                  <option>Washer Repair</option>
-                  <option>Dryer Repair</option>
-                  <option>Oven / Stove Repair</option>
-                  <option>Dishwasher Repair</option>
-                  <option>Other</option>
-                </select>
-                <div
-                  class="absolute right-6 top-1/2 transform -translate-y-1/2 text-stone-400 pointer-events-none"
-                >
-                  <i
-                    class="fa-solid fa-chevron-down"
-                    style="color: #fbb03b"
-                  ></i>
-                </div>
-              </div>
+            <div>
+                 <label class="text-xs font-light uppercase tracking-widest text-stone-500">Message</label>
+                 <textarea name="message" rows="3" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand font-light" required></textarea>
             </div>
-
-            <div class="space-y-2">
-              <label
-                class="text-xs font-light uppercase tracking-widest text-stone-500"
-                >Message</label
-              >
-              <textarea
-                rows="4"
-                required
-                class="w-full px-4 py-3 bg-stone-50 border border-stone-200 focus:border-brand focus:ring-2 focus:ring-brand focus:ring-opacity-20 outline-none transition duration-200 resize-none font-light text-stone-800 rounded-lg"
-                placeholder="Briefly describe the issue..."
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              class="w-full text-white font-medium py-4 hover:opacity-90 hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 uppercase tracking-widest text-sm rounded-lg"
-              style="background-color: #fbb03b"
-            >
-              Send Message
+            <button type="submit" class="w-full bg-stone-900 text-white font-bold py-3 rounded-lg hover:bg-stone-800 transition">
+                SEND MESSAGE
             </button>
+            <p class="form-status hidden text-center text-sm font-medium mt-2"></p>
           </form>
         </div>
       </div>
@@ -1169,10 +1109,11 @@
               
               // Helper to Validate
               const formsConfig = window.currentCMSData ? window.currentCMSData.forms : null;
-              const actionUrl = formsConfig ? formsConfig.actionUrl : "";
+              // Prioritize Injected Secret, then CMS Content
+              const actionUrl = (window.CONFIG && window.CONFIG.SCRIPT_URL) ? window.CONFIG.SCRIPT_URL : (formsConfig ? formsConfig.actionUrl : "");
               
               if (!actionUrl) {
-                  alert("Form Config Error: No Action URL set in Admin Panel (Forms section).");
+                  alert("Form Configuration Error: No Action URL available. Please check Admin Panel or Secrets.");
                   return;
               }
 

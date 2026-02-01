@@ -728,6 +728,17 @@
                 input.type = 'text';
             }
             
+            // Special handling for Action URL
+            if (path[path.length-1] === 'actionUrl' && window.CONFIG && window.CONFIG.SCRIPT_URL) {
+                 input.placeholder = "Managed via GitHub Secrets (SCRIPT0URL)";
+                 if (!value) input.value = window.CONFIG.SCRIPT_URL; // Pre-fill for visual confirmation
+                 // Optional: Make read-only or add stylized badge
+                 const badge = document.createElement('span');
+                 badge.className = 'text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded ml-2 uppercase tracking-wide';
+                 badge.innerHTML = '<i class="fa-solid fa-lock"></i> Secured';
+                 labelRow.appendChild(badge);
+            }
+            
             input.className = 'w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm font-light text-gray-800';
             input.value = value;
             
