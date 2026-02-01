@@ -59,11 +59,16 @@ window.CONFIG = ${JSON.stringify(config, null, 2)};
 fs.writeFileSync(CONFIG_FILE, fileContent.trim());
 
 console.log("Successfully generated js/config.js");
-console.log(
-  "Injected credentials for:",
-  config.auth
-    .filter((u) => u.email)
-    .map((u) => u.email)
-    .join(", ") || "None",
-);
-console.log("GitHub Token Present:", !!config.github.token);
+
+// Debug Logging (Safe, usage masked)
+const checkVar = (name, val) => {
+    console.log(`${name}: ${val ? '✅ Present (Length: ' + val.length + ')' : '❌ MISSING (Empty/Undefined)'}`);
+};
+
+console.log('--- CREDENTIALS CHECK ---');
+checkVar('ENTRY0EMAIL1', process.env.ENTRY0EMAIL1);
+checkVar('ENTRY0PASSWORD1', process.env.ENTRY0PASSWORD1);
+checkVar('ENTRY0EMAIL2', process.env.ENTRY0EMAIL2);
+checkVar('ENTRY0PASSWORD2', process.env.ENTRY0PASSWORD2);
+checkVar('GITHUB0API0KEY', process.env.GITHUB0API0KEY);
+console.log('-------------------------');
