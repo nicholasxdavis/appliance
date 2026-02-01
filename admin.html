@@ -164,6 +164,7 @@
 
         // SECTION INFO & PREVIEWS
         const SECTION_INFO = {
+            'inbox': { title: 'Message Inbox', desc: 'Private messages from your Contact/Quote forms.', html: '<div class="p-2 bg-yellow-50 border border-yellow-200 rounded"><div class="text-[8px] font-bold">New Message</div><div class="text-[6px]">From: John Doe</div></div>' },
             'general': {
                 title: 'General Settings',
                 desc: 'Controls global settings like the website title, description (for SEO), and main contact info.',
@@ -577,28 +578,72 @@
 
         // UI Rendering Logic ----------------------
 
+
+
         function renderTabs() {
             const container = document.getElementById('section-tabs');
             container.innerHTML = '';
             
             Object.keys(currentContent).forEach(key => {
-                const btn = document.createElement('button');
-                btn.textContent = key;
-                btn.className = `px-5 py-3 text-sm font-medium capitalize border-b-2 transition whitespace-nowrap ${activeTab === key ? 'border-blue-600 text-blue-600 bg-white' : 'border-transparent text-gray-500 hover:text-gray-700'}`;
-                btn.onclick = () => {
+                const tab = document.createElement('button');
+                tab.className = `px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${activeTab === key ? 'border-brand text-brand bg-blue-50' : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`;
+                tab.textContent = SECTION_INFO[key] ? SECTION_INFO[key].title : key;
+                tab.onclick = () => {
                     activeTab = key;
                     renderTabs();
-                    renderEditor(key);
+                    if (key === 'inbox') loadInbox(); 
+                    else renderEditor(currentContent[key], [key]);
                 };
-                container.appendChild(btn);
+                container.appendChild(tab);
             });
+            
+            // Add Inbox Tab manually
+            const inboxTab = document.createElement('button');
+            inboxTab.className = `px-6 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition ${activeTab === 'inbox' ? 'border-blue-600 text-blue-600 bg-blue-50' : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`;
+            inboxTab.innerHTML = '<i class="fa-solid fa-inbox mr-2"></i>Inbox';
+            inboxTab.onclick = () => {
+                activeTab = 'inbox';
+                renderTabs();
+                loadInbox();
+            };
+            container.appendChild(inboxTab);
         }
 
-        function renderEditor(sectionKey) {
+        function renderEditor(data, path = []) {
             const container = document.getElementById('editor-container');
             container.innerHTML = '';
-            // Pass the path to update function
-            createFields(container, currentContent[sectionKey], [sectionKey]);
+
+            // Show Section Header with Help Button
+            if (path.length > 0 && path.length <= 1) { // Root of a section
+                const sectionKey = path[0];
+                const info = SECTION_INFO[sectionKey];
+                
+                if (info) {
+                    const header = document.createElement('div');
+                    header.className = 'flex justify-between items-center mb-6 pb-4 border-b border-gray-100';
+                    
+                    const title = document.createElement('h2');
+                    title.className = 'text-xl font-bold text-gray-800 capitalize';
+                    title.textContent = info.title;
+                    
+                    const helpBtn = document.createElement('button');
+                    helpBtn.className = 'text-blue-500 hover:text-blue-700 hover:bg-blue-50 px-3 py-1.5 rounded-full text-xs font-medium transition flex items-center gap-2 border border-blue-200';
+                    helpBtn.innerHTML = '<i class="fa-solid fa-circle-question"></i> What is this?';
+                    helpBtn.onclick = () => showHelp(sectionKey);
+                    
+                    header.appendChild(title);
+                    header.appendChild(helpBtn);
+                    container.appendChild(header);
+                }
+            }
+
+            if (Array.isArray(data)) {
+                // Primitive arrays check inside createArrayEditor
+                createArrayEditor(container, data, path);
+                return;
+            }
+
+            createFields(container, data, path);
         }
 
         function createFields(container, data, path) {
