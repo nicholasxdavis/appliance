@@ -675,19 +675,12 @@
                  deleteBtn.title = "Delete Item";
                  deleteBtn.onclick = () => {
                      if(confirm("Are you sure you want to delete this item?")) {
-                         // Remove item from array at index
-                         // We need to update the PARENT state. 
-                         // Since we don't have a direct parent reference easily, we read, splice, update.
-                         // Path example: ['blog', 'posts'] -> index is array index
-                         
                          // Helper to get parent array from state
                          let parent = currentContent;
                          for(let i=0; i<path.length; i++) parent = parent[path[i]];
                          
                          parent.splice(index, 1);
                          
-                         // Update state
-                         // We call updateContentInState with a dummy change to trigger re-render or just re-render directly
                          renderEditor(currentContent);
                          updatePreview();
                      }
@@ -697,7 +690,15 @@
                  header.appendChild(deleteBtn);
                  itemCard.appendChild(header);
 
-                 createFields(itemCard, item, [...path, index]);
+                 // Check if item is primitive or object
+                 if (typeof item === 'object' && item !== null) {
+                    createFields(itemCard, item, [...path, index]);
+                 } else {
+                    // Primitive (String/Number) - e.g., Gallery Images or Service Locations
+                    const isImage = path.includes('images') || (typeof item === 'string' && (item.includes('/') || item.includes('.')));
+                    createInput(itemCard, item, [...path, index], isImage);
+                 }
+
                  wrapper.appendChild(itemCard);
              });
              
@@ -706,25 +707,25 @@
              addBtn.className = 'w-full py-3 border-2 border-dashed border-gray-300 text-gray-500 rounded-lg hover:border-brand hover:text-brand hover:bg-blue-50 transition font-medium text-sm flex items-center justify-center gap-2';
              addBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add New Item';
              addBtn.onclick = () => {
-                 // Logic to add new item. 
-                 // Strategy: Clone the structure of the last item in array, OR if empty, try to guess from schema or ask user.
-                 // For this specific app, we can be smart.
-                 
-                 let newItem = {};
+                 let newItem;
                  
                  // 1. Try to clone last item if exists
                  if (data.length > 0) {
-                     newItem = JSON.parse(JSON.stringify(data[0]));
-                     // Clear values
-                     Object.keys(newItem).forEach(k => {
-                         if (k === 'id') newItem[k] = 'post-' + Date.now();
-                         else if (typeof newItem[k] === 'string') newItem[k] = '';
-                         else if (typeof newItem[k] === 'boolean') newItem[k] = false;
-                     });
+                     const last = data[0]; // Clone schema from first item
+                     if (typeof last === 'object' && last !== null) {
+                         newItem = JSON.parse(JSON.stringify(last));
+                         // Clear values
+                         Object.keys(newItem).forEach(k => {
+                             if (k === 'id') newItem[k] = 'post-' + Date.now();
+                             else if (typeof newItem[k] === 'string') newItem[k] = '';
+                             else if (typeof newItem[k] === 'boolean') newItem[k] = false;
+                         });
+                     } else {
+                         // Primitive clone (empty string)
+                         newItem = "";
+                     }
                  } else {
                      // 2. Fallback for empty array. 
-                     // Since we only have specific arrays (badges, brands, services, posts), we can just provide a generic object 
-                     // and let the user fill properties. But simpler is just to rely on 'blog' logic.
                      if (path.includes('posts')) {
                          newItem = {
                              id: 'post-' + Date.now(),
@@ -740,6 +741,10 @@
                          newItem = { name: '', logo: '' };
                      } else if (path.includes('items')) { // Services/Reviews
                          newItem = { title: '', iconClass: '', description: '', text: '', author: '', date: '' };
+                     } else if (path.includes('images') || path.includes('locations')) {
+                         newItem = ""; // Default string for gallery/locations
+                     } else {
+                         newItem = ""; // Generic fallback
                      }
                  }
                  
@@ -751,6 +756,10 @@
                  renderEditor(currentContent);
                  updatePreview();
              };
+             
+             wrapper.appendChild(addBtn);
+             container.appendChild(wrapper);
+        }
              
              wrapper.appendChild(addBtn);
              container.appendChild(wrapper);
