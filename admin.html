@@ -140,9 +140,9 @@
     </div>
 
     <!-- Help Modal -->
-    <div id="help-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden p-4 sm:p-0">
+    <div id="help-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden p-4 sm:p-0" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
-            <button onclick="document.getElementById('help-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 sticky z-10">
+            <button onclick="document.getElementById('help-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 sticky z-10 bg-white rounded-full p-1">
                 <i class="fa-solid fa-xmark fa-lg"></i>
             </button>
             <h3 class="text-2xl font-bold mb-4 text-gray-800">Section Help</h3>
@@ -232,8 +232,10 @@
         document.addEventListener('DOMContentLoaded', () => {
              // 1. Consume Injected Config
              if (window.CONFIG) {
-                 if (window.CONFIG.auth) {
-                     window.CONFIG.auth.forEach(u => {
+                 // Fix: detailed check for VALID_USERS property
+                 const users = window.CONFIG.VALID_USERS || window.CONFIG.auth;
+                 if (users && Array.isArray(users)) {
+                     users.forEach(u => {
                          if(u.email && u.pass) VALID_USERS.push(u);
                      });
                  }
@@ -398,7 +400,14 @@
                 currentContent = JSON.parse(decodedContent);
 
                 renderTabs();
-                renderEditor(activeTab);
+                renderTabs();
+                // Fix: Pass the actual content object, not just the string key
+                if (currentContent[activeTab]) {
+                    renderEditor(currentContent[activeTab], [activeTab]);
+                } else {
+                    renderEditor({}, [activeTab]);
+                }
+                updatePreview(); // Initial sync
                 updatePreview(); // Initial sync
 
             } catch (error) {
@@ -619,8 +628,7 @@
                 const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/inbox.json`, {
                     headers: { 
                         'Authorization': `token ${token}`, 
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Cache-Control': 'no-cache' 
+                        'Accept': 'application/vnd.github.v3+json'
                     }
                 });
                 
@@ -783,7 +791,8 @@
                 let isImage = false;
                 if (path.length > 0) {
                     const key = path[path.length - 1].toLowerCase();
-                    isImage = key.includes('img') || key.includes('image') || key.includes('logo') || key.includes('icon');
+                    // Fix: Use more robust check for image keys, including nested 'images' object keys
+                    isImage = key.includes('img') || key.includes('image') || key.includes('logo') || key.includes('icon') || path.includes('images');
                 }
                 
                 createInput(container, data, path, isImage);
@@ -864,17 +873,19 @@
             
             // Special handling for Action URL
             if (path[path.length-1] === 'actionUrl' && window.CONFIG && window.CONFIG.SCRIPT_URL) {
-                 input.placeholder = "Managed via GitHub Secrets (SCRIPT0URL)";
-                 if (!value) input.value = window.CONFIG.SCRIPT_URL; // Pre-fill for visual confirmation
-                 // Optional: Make read-only or add stylized badge
+                 input.value = window.CONFIG.SCRIPT_URL; 
+                 input.readOnly = true;
+                 input.className = 'w-full px-3 py-2 bg-gray-100 text-gray-500 border border-gray-200 rounded text-sm cursor-not-allowed';
+                 input.title = "Managed via GitHub Secrets (SCRIPT0URL)";
+                 
                  const badge = document.createElement('span');
-                 badge.className = 'text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded ml-2 uppercase tracking-wide';
-                 badge.innerHTML = '<i class="fa-solid fa-lock"></i> Secured';
+                 badge.className = 'text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded ml-2 uppercase tracking-wide border border-blue-200';
+                 badge.innerHTML = '<i class="fa-solid fa-server"></i> Managed by Secrets';
                  labelRow.appendChild(badge);
+            } else {
+                 input.className = 'w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm font-light text-gray-800';
+                 input.value = value;
             }
-            
-            input.className = 'w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm font-light text-gray-800';
-            input.value = value;
             
             input.oninput = (e) => {
                 updateContentInState(path, e.target.value);
