@@ -223,7 +223,7 @@
     "errorMessage": "Something went wrong. Please try again or call us directly."
   },
   "quote": {
-    "visible": true,
+    "visible": false,
     "badge": "Get A Quote",
     "title": "Need a Repair?",
     "description": "Don't let a broken appliance ruin your week. Fill out the form to get a free quote and schedule your repair.",
