@@ -144,8 +144,14 @@
     "image": "https://cdn.homeadvisor.com/fs/files/eid/157920000/157927890/20034257_dlargesquare.png",
     "imageQuote": "\"AJ diagnosed the problem quickly!\"",
     "stats": [
-      { "value": "5+ Years", "label": "Of Experience" },
-      { "value": "4.9", "label": "Star Rating" }
+      {
+        "value": "5+ Years",
+        "label": "Of Experience"
+      },
+      {
+        "value": "4.9",
+        "label": "Star Rating"
+      }
     ]
   },
   "serviceArea": {
@@ -212,9 +218,9 @@
     ]
   },
   "forms": {
-      "actionUrl": "",
-      "successMessage": "Thank you! We have received your message and will contact you shortly.",
-      "errorMessage": "Something went wrong. Please try again or call us directly."
+    "actionUrl": "",
+    "successMessage": "Thank you! We have received your message and will contact you shortly.",
+    "errorMessage": "Something went wrong. Please try again or call us directly."
   },
   "quote": {
     "visible": true,
