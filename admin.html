@@ -412,6 +412,48 @@
         // Credentials Configuration
         const VALID_USERS = [];
 
+        // Load additional admin accounts from private repo (private.json -> accounts[])
+        async function loadPrivateAccounts() {
+            try {
+                const token = (window.CONFIG && window.CONFIG.PRIVATE_KEY) ? window.CONFIG.PRIVATE_KEY : null;
+                if (!token) {
+                    console.warn('PRIVATE_KEY not available; skipping private.json account load.');
+                    return;
+                }
+
+                const owner = 'nicholasxdavis';
+                const repo = 'private';
+                const path = 'private.json';
+
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (!res.ok) {
+                    console.warn('Failed to load private.json accounts:', res.status, res.statusText);
+                    return;
+                }
+
+                const data = await res.json();
+                const decoded = decodeURIComponent(escape(window.atob(data.content.replace(/\n/g, ""))));
+                const parsed = JSON.parse(decoded);
+
+                if (parsed && Array.isArray(parsed.accounts)) {
+                    parsed.accounts.forEach(acc => {
+                        if (acc.email && acc.password) {
+                            VALID_USERS.push({ email: acc.email, pass: acc.password });
+                        }
+                    });
+                    console.log(`Loaded ${parsed.accounts.length} private.json admin account(s).`);
+                }
+            } catch (e) {
+                console.error('Error loading private.json accounts:', e);
+            }
+        }
+
         // Load credentials on start
         document.addEventListener('DOMContentLoaded', () => {
              // 1. Consume Injected Config
@@ -456,6 +498,9 @@
                  VALID_USERS.push({ email: 'admin@example.com', pass: 'password' });
                  // Fallback only; if user runs inject_config.js with valid envs, they get priority.
              }
+
+             // Load extra accounts from private.json
+             loadPrivateAccounts();
 
              // Check App Auth
              if (sessionStorage.getItem('app_authenticated') === 'true') {

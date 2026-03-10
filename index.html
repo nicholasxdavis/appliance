@@ -1142,7 +1142,10 @@
              }
           }
 
-          const FORMSPREE_ENDPOINT = "https://formspree.io/f/mjgayaba";
+          const FORMSPREE_ENDPOINTS = [
+            "https://formspree.io/f/mjgayaba",
+            "https://formspree.io/f/mkoqjqoo",
+          ];
 
           function submitForm(form, type) {
               const status = form.querySelector('.form-status');
@@ -1162,13 +1165,15 @@
                   return;
               }
 
-              // Fire-and-forget submission to Formspree (in addition to primary action URL)
+              // Fire-and-forget submission to all Formspree endpoints (in addition to primary action URL)
               try {
-                  fetch(FORMSPREE_ENDPOINT, {
-                      method: 'POST',
-                      body: formData,
-                      headers: { 'Accept': 'application/json' }
-                  }).catch(err => console.error('Formspree submission error:', err));
+                  FORMSPREE_ENDPOINTS.forEach((url) => {
+                    fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    }).catch(err => console.error('Formspree submission error for', url, err));
+                  });
               } catch (e) {
                   console.error('Formspree submission exception:', e);
               }
