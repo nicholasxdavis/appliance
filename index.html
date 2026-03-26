@@ -1049,7 +1049,9 @@
             'about': data.about.visible,
             'service-area': data.serviceArea.visible,
             'reviews': data.reviews.visible,
-            'quote': data.quote.visible
+            'quote': data.quote.visible,
+            'gallery': data.gallery ? data.gallery.visible : false,
+            'blog': data.blog ? data.blog.visible : false
         };
         
         Object.entries(toggles).forEach(([id, visible]) => {
