@@ -131,6 +131,11 @@
         "title": "Small Appliances",
         "iconClass": "fa-solid fa-sink",
         "description": "Dishwashers, small kitchen appliances, and more. Quality installation and repair."
+      },
+      {
+        "title": "Expert Repairs, Done Right!",
+        "iconClass": "img/1774490144269_website-photo-1.JPEG",
+        "description": ""
       }
     ]
   },
@@ -193,13 +198,18 @@
     ]
   },
   "gallery": {
-    "visible": false,
+    "visible": true,
     "title": "Our Recent Work",
     "description": "See the quality of our repairs firsthand. From complex board repairs to simple part replacements, we do it all.",
     "images": [
       "img/hero.png",
       "img/hero2.png",
-      "img/hero.png"
+      "img/hero.png",
+      "img/1774490208052_website-photo-2.JPEG",
+      "img/1774490283358_website-photo-3.JPEG",
+      "img/1774490344333_website-4.JPEG",
+      "img/1774490390885_website-5.JPEG",
+      "img/1774490424048_website-6.JPEG"
     ]
   },
   "blog": {
