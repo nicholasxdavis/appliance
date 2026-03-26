@@ -926,11 +926,12 @@
                     <div class="text-sm text-gray-600 mb-3 flex flex-wrap gap-4 border-b border-gray-50 pb-3">
                         <a href="mailto:${msg.email}" class="flex items-center gap-1 hover:text-blue-600 transition"><i class="fa-regular fa-envelope text-xs"></i> ${msg.email}</a>
                         ${msg.phone ? `<a href="tel:${msg.phone}" class="flex items-center gap-1 hover:text-blue-600 transition"><i class="fa-solid fa-phone text-xs"></i> ${msg.phone}</a>` : ''}
+                        ${msg.address ? `<span class="flex items-center gap-1 text-gray-600"><i class="fa-solid fa-map-pin text-xs"></i> ${msg.address}</span>` : ''}
                         ${msg.service ? `<span class="flex items-center gap-1 text-purple-600 bg-purple-50 px-2 py-0.5 rounded text-xs font-medium"><i class="fa-solid fa-screwdriver-wrench"></i> ${msg.service}</span>` : ''}
                     </div>
                     
                     <div class="prose prose-sm max-w-none text-gray-700">
-                        <p class="whitespace-pre-wrap font-light italic">"${msg.message}"</p>
+                        <p class="whitespace-pre-wrap font-light italic">"${msg.description || msg.message || 'No description provided.'}"</p>
                     </div>
                 `;
                 list.appendChild(card);
